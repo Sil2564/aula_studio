@@ -20,7 +20,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// REGISTRAZIONE UTENTE
 app.post('/register', (req, res) => {
   const { nome, cognome, matricola, corso, anno, email, password } = req.body;
 
@@ -44,7 +43,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-// LOGIN
+
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -62,7 +61,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// CHECK DISPONIBILITÀ SU PIÙ SLOT
+
 app.post('/check-availability', (req, res) => {
   const { data, ora_inizio, ora_fine, numero_persone } = req.body;
 
@@ -103,7 +102,7 @@ app.post('/check-availability', (req, res) => {
   });
 });
 
-// EFFETTUA PRENOTAZIONE
+
 app.post('/make-reservation', (req, res) => {
   const { user_id, data, ora_inizio, ora_fine, numero_persone } = req.body;
 
@@ -132,7 +131,7 @@ app.post('/make-reservation', (req, res) => {
   });
 });
 
-// VISUALIZZA PRENOTAZIONI UTENTE
+
 app.get('/my-reservations/:user_id', (req, res) => {
   const user_id = req.params.user_id;
 
@@ -171,7 +170,6 @@ app.delete('/prenotazioni/:id', (req, res) => {
     }
   );
 });
-
 
 // AVVIO SERVER
 app.listen(port, () => {

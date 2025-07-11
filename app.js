@@ -45,14 +45,9 @@ const Home = {
       </div>
   </section>`,
   mounted() {
-    // Eventuali funzionalità JavaScript
+    // Eventuali funzionalità JS
   }
 };
-
-
-
-
-
 
 
 
@@ -87,19 +82,6 @@ const contatti = {
       </section>
       `,
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -192,35 +174,7 @@ const aiuto = {
           </p>
       </section> `,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -302,6 +256,7 @@ const eventi = {
 };
 
 
+
 const panoramica = {
   template: `
     <section class="panoramica-section">
@@ -330,15 +285,11 @@ const panoramica = {
 
 
 
-
 const prenota = {
   template: `
     <section class="centered-section">
       <h2>Prenota</h2>            
       <p>Accedi per prenotare la tua sessione presso L'Aula Studio.</p>
-
-
-
 
       <!-- Form di login -->
       <form @submit.prevent="login">
@@ -353,15 +304,9 @@ const prenota = {
         <button type="submit">Login</button>
       </form>
 
-
-
-
       <!-- Messaggio di errore o successo -->
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
       <div v-if="successMessage" class="success">{{ successMessage }}</div>
-
-
-
 
       <div v-if="!isLoggedIn">
         Non hai un account?
@@ -393,13 +338,7 @@ const prenota = {
           }),
         });
 
-
-
-
         const data = await response.json();
-
-
-
 
         if (response.ok) {
           // Login riuscito
@@ -408,16 +347,14 @@ const prenota = {
           this.isLoggedIn = true; // Utente loggato, cambia stato
          
           // Salva i dati di login in sessionStorage
-          // SALVA L’ID DELL’UTENTE
           sessionStorage.setItem('user', JSON.stringify({
             email: this.email,
             id: data.user_id   // 👈 questo deve arrivare dal backend
           }));
 
 
-          // Fai il redirect alla pagina prenota2 dopo un breve delay
           setTimeout(() => {
-            this.$router.push({ name: 'prenota2' }); // Vai alla vista prenota2
+            this.$router.push({ name: 'prenota2' }); 
           }, 1000);  // Imposta un piccolo delay (1 secondo) per vedere il messaggio di successo prima del redirect
         } else {
           // Errore nel login
@@ -431,10 +368,6 @@ const prenota = {
       }
     },
 
-
-
-
-    // Metodo per navigare alla registrazione
     goToRegistration() {
       this.$router.push({ name: 'registrati' });
     },
@@ -451,47 +384,11 @@ const prenota = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const registrati = {
   template: `
       <section class="page-container">
           <h2>Registrazione</h2>
           <p>Compila i seguenti campi per registrarti.</p>
-
-
-
-
-
-
-
 
           <form @submit.prevent="submitRegistration">
               <input type="text" v-model="nome" placeholder="Inserisci il tuo nome" required>
@@ -525,47 +422,19 @@ const registrati = {
               <button type="submit">Registrati</button>
           </form>
 
-
-
-
-
-
-
-
           <div v-if="regError" class="error-message">
               {{ regError }}
           </div>
 
-
-
-
-
-
-
-
           <div v-if="successMessage" class="success-message">
               {{ successMessage }}
           </div>
-
-
-
-
-
-
-
 
           <div>
               Hai già un account? <a @click.prevent="goToLogin">Accedi qui</a>
           </div>
       </section>
   `,
-
-
-
-
-
-
-
 
   data() {
       return {
@@ -642,7 +511,6 @@ const prenota2 = {
       <select v-model="durata" id="durata" required>
         <option v-for="n in durataMassima" :key="n" :value="n">{{ n }}</option>
       </select>
-
 
       <label for="posti">Numero di posti:</label>
       <input type="number" v-model.number="posti" id="posti" min="1" max="4" required />
@@ -792,18 +660,18 @@ const prenota2 = {
     },
 
     async deleteReservation(id) {
-      // 1) chiedo conferma all’utente
+      
       if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) {
         return;
       }
       try {
-        // 2) chiamo il DELETE sul server
+        
         const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, {
           method: 'DELETE'
         });
         const json = await res.json();
         if (json.success) {
-          // 3) rimuovo localmente la prenotazione appena cancellata
+          
           this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
         } else {
           alert('Errore: ' + (json.error || 'impossibile cancellare'));
@@ -815,7 +683,6 @@ const prenota2 = {
     
   },
     
-
   watch: {
     slot(newSlot) {
       const slotInt = parseInt(newSlot);
@@ -855,11 +722,6 @@ const prenota2 = {
       });
   }
 };
-
-
-
-
-
 
 
 
@@ -949,31 +811,12 @@ const routes = [
   { path: '/regolamento', component: regolamento },
 ];
 
-
 const router = VueRouter.createRouter({
   history: VueRouter.createWebHashHistory(),
   routes
 });
 
-
 // Crea l'app Vue
 const app = Vue.createApp({});
 app.use(router);
 app.mount('#app');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
