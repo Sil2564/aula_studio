@@ -1,0 +1,459 @@
+/* Stili generali */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-size: 1.1rem; /* Incrementa la dimensione del testo generale */
+    line-height: 1.5; /* Aggiunge maggiore spazio tra le righe per leggibilità */
+}
+
+
+main {
+    flex: 1; /* Si espande per occupare lo spazio disponibile */
+    padding: 20px;
+}
+
+
+/* Header: spazio sopra la pagina */
+header {
+    background-color: #b22222;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    flex-shrink: 0; /* Impedisce che l'header si riduca quando la pagina è più piccola */
+}
+
+
+header h1 {
+    font-size: 2rem; /* Titolo principale più grande */
+    margin: 0;
+}
+
+
+header .main-nav {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center; /* Disposizione orizzontale */
+}
+
+
+header .main-nav ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+
+header .main-nav li {
+    margin: 0 15px;
+}
+
+
+header .main-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem; /* Dimensione del testo del menu maggiore */
+}
+
+
+header .main-nav a:hover {
+    text-decoration: underline;
+}
+
+
+section {
+    padding: 20px;
+    width: 85%; /* Espande la sezione su tutta la larghezza */
+    box-sizing: border-box;
+}
+
+
+/* Page Container */
+.page-container {
+    padding: 20px;
+    text-align: left; /* Allineamento a sinistra */
+    min-height: 400px;
+    position: relative;
+    margin-right: 0; /* Elimina il margine destro per far espandere il contenuto */
+    max-width: 100%; /* Espande lo spazio per il contenuto */
+    box-sizing: border-box;
+}
+
+
+/* Sezione Home */
+.home-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    width: 100%; /* Rende ogni sezione larga quanto la pagina */
+}
+
+
+.home-section h3 {
+    font-size: 1.8rem;
+    color: #b22222;
+    margin-bottom: 15px;
+}
+
+
+.home-section ul {
+    margin-left: 20px;
+}
+
+
+.home-section ul li {
+    margin-bottom: 10px;
+}
+
+
+/* Larghezza delle sezioni */
+.home-section p, .home-section ul {
+    margin-bottom: 20px;
+}
+
+
+.home-section ul li strong {
+    color: #b22222;
+}
+
+
+
+/* Stili per la tabella delle prenotazioni */
+table.prenotazioni-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+ 
+  table.prenotazioni-table th, table.prenotazioni-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+ 
+  table.prenotazioni-table th {
+    background-color: #b22222;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+ 
+  table.prenotazioni-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+ 
+  table.prenotazioni-table tr:hover {
+    background-color: #e0e0e0;
+  }
+ 
+  table.prenotazioni-table td {
+    font-size: 1.1rem;
+  }
+ 
+  table.prenotazioni-table td, table.prenotazioni-table th {
+    border: 1px solid #ccc;
+  }  
+
+
+/* Sezione Panoramica */
+.panoramica-section {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    width: 100%;
+    max-width: 1200px; /* Imposta una larghezza massima per migliorare la leggibilità */
+    margin: 0 auto;
+}
+
+
+.panoramica-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+.step {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.step h3 {
+    font-size: 1.6rem;
+    color: #b22222;
+    margin-bottom: 10px;
+}
+
+
+.step p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+
+.step p strong {
+    font-weight: bold;
+    color: #b22222;
+}
+
+
+/* Responsività */
+@media (max-width: 768px) {
+    .panoramica-steps {
+        flex-direction: column;
+    }
+    .step {
+        padding: 15px;
+    }
+}
+
+
+/* Form di registrazione */
+form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Espande il form su tutta la larghezza */
+    max-width: 400px; /* Limita la larghezza per una lettura migliore */
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+form input, form select, form button {
+    font-size: 1.1rem; /* Maggiore dimensione per campi di input, select e pulsanti */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+form input:focus, form select:focus {
+    outline: none;
+    border-color: #b22222;
+    box-shadow: 0 0 5px rgba(178, 34, 34, 0.5);
+}
+
+
+form button {
+    background-color: #b22222;
+    color: white;
+    font-size: 1.2rem; /* Testo del bottone più grande */
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+
+form button:hover {
+    background-color: #8b0000;
+}
+
+
+form a {
+    color: #b22222;
+    font-weight: bold;
+    font-size: 1rem; /* Link con dimensione maggiore */
+    text-decoration: none;
+}
+
+
+form a:hover {
+    text-decoration: underline;
+}
+
+
+.error-message, .success-message {
+    text-align: center;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-size: 1.1rem; /* Messaggi di errore e successo più grandi */
+}
+
+
+.error-message {
+    color: white;
+    background-color: #8b0000;
+}
+
+
+.success-message {
+    color: white;
+    background-color: #228b22;
+}
+
+
+/* Menu Laterale */
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Menu laterale fisso sul lato destro */
+    top: 30%;
+    right: 20px; /* Distanza dal bordo destro */
+    width: 150px; /* Larghezza fissa per il menu laterale */
+    z-index: 10;
+    text-align: center;
+}
+
+
+.sidebar-buttons ul {
+    list-style-type: none; /* Rimuove i puntini */
+    padding: 0; /* Rimuove il padding predefinito */
+    margin: 0; /* Rimuove il margine predefinito */
+}
+
+
+.sidebar-buttons li {
+    margin-bottom: 15px; /* Distanza tra gli elementi del menu */
+}
+
+
+.sidebar-buttons a {
+    display: block;
+    background-color: #b22222;
+    color: white;
+    text-align: center;
+    font-size: 1.1rem; /* Dimensione dei bottoni del menu laterale maggiore */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.sidebar-buttons a:hover {
+    background-color: #8b0000;
+}
+
+
+/* Footer */
+footer {
+    background-color: #b22222;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1.2rem; /* Testo del footer più grande */
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
+
+footer img {
+    width: 35px
+  }
+
+/* Eventi */
+.event {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #b22222;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem; /* Testo degli eventi più grande */
+}
+
+
+.event h3 {
+    color: #b22222;
+    font-size: 1.5rem; /* Titolo degli eventi maggiore */
+}
+
+
+.event p {
+    margin: 5px 0;
+}
+
+
+.event .note {
+    color: #8b0000;
+    font-style: italic;
+}
+
+
+/* Liste per regolamento, supporto, contatti */
+.supporto-list, .contatti-list, .regolamento-list {
+    list-style-type: decimal;
+    margin: 20px auto;
+    padding-left: 40px;
+    text-align: left;
+    max-width: 800px;
+    line-height: 1.8;
+    font-size: 1.1rem; /* Maggiore dimensione per liste */
+}
+
+
+.supporto-list li, .contatti-list li, .regolamento-list li {
+    margin-bottom: 20px;
+}
+
+
+.supporto-list strong, .contatti-list strong, .regolamento-list strong {
+    font-size: 1.2rem; /* Evidenziazione di testo importante nelle liste */
+    color: #b22222;
+}
+
+
+.centered-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra orizzontalmente il contenuto */
+    text-align: center; /* Centra il testo */
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 100%; /* Espande la sezione per tutta la larghezza */
+    box-sizing: border-box;
+}
+
+
+.centered-section h2 {
+    font-size: 2rem; /* Dimensione più grande per il titolo */
+    margin-bottom: 15px;
+}
+
+
+.centered-section p {
+    font-size: 1.2rem; /* Migliora la leggibilità del testo */
+    margin-bottom: 20px;
+}
+
+
+.register-link {
+    margin-top: 20px;
+    font-size: 1rem; /* Dimensione del testo per il link di registrazione */
+}
+
+
+.register-link a {
+    color: #b22222;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+

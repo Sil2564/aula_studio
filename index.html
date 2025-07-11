@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4"></script>
+    <title>L'Aula Studio</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <style>
+
+
+       
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>AULA STUDIO</h1>
+           
+            <nav class="main-nav">
+                <ul>
+                    <li><router-link to="/" role="link">Home</router-link></li>
+                    <li><router-link to="/contatti" role="link">Contatti</router-link></li>
+                    <li><router-link to="/aiuto" role="link">Aiuto</router-link></li>
+                </ul>
+            </nav>
+        </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Menu Laterale -->
+        <div class="sidebar-buttons">
+            <ul>
+                <li><router-link to="/eventi" role="link">Eventi</router-link></li>
+                <li><router-link to="/panoramica" role="link">Panoramica</router-link></li>
+                <li><router-link to="/prenota" role="link">Prenota</router-link></li>
+                <li><router-link to="/regolamento" role="link">Regolamento</router-link></li>
+            </ul>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <router-view></router-view>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="app.js"></script>
+
+
+
+
+
+
+
+
+<footer>
+    <a href="tel:+1234567890" title="Chiama"><img src="tele.png"></a>
+    <a href="mailto:info@laulastudio.com" title="Manda Email"><img src="mail.png"></a>
+    <a href="https://www.facebook.com/unibo.it"><img src="facebook.png"></a>
+    <a href="https://www.instagram.com/unibo"><img src="insta.png"></a>
+    <a href="https://maps.app.goo.gl/TkQxpbRExYrLJHMa7" title="Posizione"><img src="posizione.png"></a>
+    <br>Compito di Busti Silvia e Niki Hammond</footer>
+</body>
+</html>
+
