@@ -408,9 +408,11 @@ const prenota = {
           this.isLoggedIn = true; // Utente loggato, cambia stato
          
           // Salva i dati di login in sessionStorage
-          sessionStorage.setItem('user', JSON.stringify({ email: this.email }));
-
-
+          // SALVA L’ID DELL’UTENTE
+          sessionStorage.setItem('user', JSON.stringify({
+            email: this.email,
+            id: data.user_id   // 👈 questo deve arrivare dal backend
+          }));
 
 
           // Fai il redirect alla pagina prenota2 dopo un breve delay
@@ -604,7 +606,7 @@ const registrati = {
                   this.successMessage = data.message;
                   setTimeout(() => {
                       this.successMessage = null;
-                      this.$router.push({ name: 'prenota2' }); // Vai alla pagina di login
+                      this.$router.push({ name: 'prenota' }); // Vai alla pagina di login
                   }, 3000);
               } else if (data.error) {
                   this.regError = data.error;
@@ -623,7 +625,6 @@ const registrati = {
 
 
 
-
 const prenota2 = {
   template: `
   <section>
@@ -632,166 +633,140 @@ const prenota2 = {
       <label for="data">Data:</label>
       <input type="date" v-model="data" id="data" required />
 
-
-      <label for="ora">Ora di inizio:</label>
-      <select v-model="ora" id="ora" required>
-        <option v-for="time in orari" :value="time">{{ time }}</option>
+      <label for="slot">Ora di inizio:</label>
+      <select v-model="slot" id="slot" required>
+        <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
       </select>
-
 
       <label for="durata">Durata (ore):</label>
       <select v-model="durata" id="durata" required>
-        <option value="1">1</option>
-        <option value="2">2</option>
+        <option v-for="n in durataMassima" :key="n" :value="n">{{ n }}</option>
       </select>
 
 
       <label for="posti">Numero di posti:</label>
       <input type="number" v-model.number="posti" id="posti" min="1" max="4" required />
 
-
       <button type="submit">Verifica Disponibilità</button>
     </form>
 
-
-    <!-- Mostra messaggio di disponibilità -->
     <div v-if="availabilityMessage && !isBookingConfirmed" :class="{ success: isAvailable, error: !isAvailable }">
       {{ availabilityMessage }}
     </div>
 
-
-    <!-- Mostra il tasto 'Conferma Prenotazione' se il tavolo è disponibile -->
     <div v-if="isAvailable && !isBookingConfirmed">
       <button @click="showConfirmation">Conferma Prenotazione</button>
     </div>
 
-
-    <!-- Messaggio di conferma della prenotazione -->
     <div v-if="isBookingConfirmed">
       <p>La tua prenotazione è stata confermata!</p>
-      <!-- Link per ricaricare la pagina e prenotare un'altra sessione -->
       <a href="#" @click.prevent="reloadPage">Prenota un'altra sessione</a>
     </div>
 
-
     <h3>Le mie prenotazioni</h3>
 
-
-    <!-- Messaggio se non ci sono prenotazioni -->
     <div v-if="!isLoading && prenotazioni.length === 0">
       <p>Non hai ancora prenotazioni.</p>
     </div>
 
-
-    <!-- Tabella delle prenotazioni -->
     <table v-if="!isLoading && prenotazioni.length > 0" class="prenotazioni-table">
       <thead>
         <tr>
           <th>Data</th>
           <th>Ora di Inizio</th>
+          <th>Ora di Fine</th>
           <th>Numero di Posti</th>
-          <th>Tavolo Assegnato</th>
+          <th>Azioni</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="booking in prenotazioni" :key="booking.id">
           <td>{{ booking.data }}</td>
-          <td>{{ booking.ora_inizio }} - {{ booking.ora_fine }}</td>
+          <td>{{ convertiSlot(booking.ora_inizio) }}</td>
+          <td>{{ convertiSlot(booking.ora_fine) }}</td>
           <td>{{ booking.numero_persone }}</td>
-          <td>{{ booking.tavolo_id }}</td>
+          <td>
+            <button @click="deleteReservation(booking.id)">Cancella</button>
+          </td>
         </tr>
       </tbody>
     </table>
 
-
-    <!-- Caricamento in corso -->
     <div v-if="isLoading">
       <p>Caricamento delle prenotazioni...</p>
     </div>
-
-
   </section>
   `,
   data() {
     return {
       data: '',
-      ora: '',
+      slot: 1,
       durata: 1,
+      durataOpzioni: [1, 2],
       posti: 1,
-      orari: Array.from({ length: 13 }, (_, i) => `${8 + i}:00`), // Orari 8:00 - 20:00
+      orari: Array.from({ length: 12 }, (_, i) => ({
+        slot: i + 1,
+        label: `${8 + i}:00 - ${9 + i}:00`
+      })),
       availabilityMessage: '',
       isAvailable: false,
-      isBookingConfirmed: false,  // Aggiungi uno stato per confermare la prenotazione
+      isBookingConfirmed: false,
       prenotazioni: [],
       isLoading: true,
-      selectedTavoloId: null, // Nuovo campo per il tavolo selezionato
     };
   },
+  computed: {
+    durataMassima() {
+      return this.slot === 12 ? 1 : 2;
+    }
+  },
+
   methods: {
+    convertiSlot(slot) {
+      const ora = 8 + (parseInt(slot) - 1);
+      return `${ora.toString().padStart(2, '0')}:00`;
+    },
+
     async checkAvailability() {
       try {
-        const ora_inizio = parseInt(this.ora.split(':')[0]); // Estrai l'ora (ad esempio "8")
-        const minuti_inizio = this.ora.split(':')[1]; // Estrai i minuti (ad esempio "00")
-        const ora_fine = ora_inizio + parseInt(this.durata);
-
-
-        const ora_fine_format = `${ora_fine.toString().padStart(2, '0')}:${minuti_inizio}`;
-
+        const slotInizio = parseInt(this.slot);
+        const slotFine = slotInizio + parseInt(this.durata);
 
         const response = await fetch('http://localhost:8000/check-availability', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             data: this.data,
-            ora_inizio: this.ora,
-            ora_fine: ora_fine_format,
+            ora_inizio: slotInizio,
+            ora_fine: slotFine,
             numero_persone: this.posti
           }),
         });
-   
+
         const result = await response.json();
         if (result.success) {
           this.isAvailable = true;
-          this.availabilityMessage = 'Tavoli disponibili';
-          this.tavoliDisponibili = result.tavoli_disponibili;
-
-
-          if (this.tavoliDisponibili && this.tavoliDisponibili.length > 0) {
-            this.selectedTavoloId = this.tavoliDisponibili[Math.floor(Math.random() * this.tavoliDisponibili.length)].id;
-          } else {
-            console.log("Nessun tavolo disponibile.");
-          }
-
-
+          this.availabilityMessage = 'Posti disponibili!';
         } else {
           this.isAvailable = false;
           this.availabilityMessage = result.error;
         }
-      } catch (error) {
-        console.error('Errore durante la verifica:', error);
+      } catch (err) {
+        console.error('Errore nella verifica:', err);
       }
     },
-
 
     async showConfirmation() {
-      // Mostra un prompt di conferma prima di procedere con la prenotazione
-      const isConfirmed = window.confirm('Vuoi confermare questa prenotazione?');
-      if (isConfirmed) {
-        await this.confirmBooking();
-      }
+      const conferma = window.confirm('Vuoi confermare la prenotazione?');
+      if (conferma) await this.confirmBooking();
     },
-
 
     async confirmBooking() {
       try {
-        const userId = 1;  // Supponiamo che l'utente loggato abbia ID = 1 (questo dovrebbe essere dinamico)
-        const ora_inizio = parseInt(this.ora.split(':')[0]); // Estrai solo l'ora
-        const minuti_inizio = this.ora.split(':')[1]; // Estrai i minuti
-        const ora_fine = ora_inizio + parseInt(this.durata);
+        const userId = JSON.parse(sessionStorage.getItem('user'))?.id || 1;
 
-
-        const oraFine = `${ora_fine.toString().padStart(2, '0')}:${minuti_inizio}`;
-
+        const slotInizio = parseInt(this.slot);
+        const slotFine = slotInizio + parseInt(this.durata);
 
         const response = await fetch('http://localhost:8000/make-reservation', {
           method: 'POST',
@@ -799,56 +774,87 @@ const prenota2 = {
           body: JSON.stringify({
             user_id: userId,
             data: this.data,
-            ora_inizio: this.ora,
-            ora_fine: oraFine,
-            numero_persone: this.posti,
-            tavolo_id: this.selectedTavoloId  // Passa il tavolo selezionato
+            ora_inizio: slotInizio,
+            ora_fine: slotFine,
+            numero_persone: this.posti
           }),
         });
- 
+
         const result = await response.json();
         if (result.success) {
+          this.isBookingConfirmed = true;
           this.prenotazioni.push(result.booking);
-          this.isBookingConfirmed = true;  // Conferma la prenotazione
         }
         alert(result.message);
-      } catch (error) {
-        console.error('Errore durante la prenotazione:', error);
+      } catch (err) {
+        console.error('Errore prenotazione:', err);
       }
     },
 
+    async deleteReservation(id) {
+      // 1) chiedo conferma all’utente
+      if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) {
+        return;
+      }
+      try {
+        // 2) chiamo il DELETE sul server
+        const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, {
+          method: 'DELETE'
+        });
+        const json = await res.json();
+        if (json.success) {
+          // 3) rimuovo localmente la prenotazione appena cancellata
+          this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
+        } else {
+          alert('Errore: ' + (json.error || 'impossibile cancellare'));
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Si è verificato un errore durante la cancellazione.');
+      }
+    
+  },
+    
 
-    reloadPage() {
-      // Ricarica la pagina per prenotare un'altra sessione
-      window.location.reload();
+  watch: {
+    slot(newSlot) {
+      const slotInt = parseInt(newSlot);
+      if (slotInt === 12) {
+        this.durataOpzioni = [1];
+        if (this.durata > 1) this.durata = 1; // forza 1h se era 2
+      } else {
+        this.durataOpzioni = [1, 2];
+      }
     }
   },
 
 
+    reloadPage() {
+      window.location.reload();
+    }
+  },
   mounted() {
-    const userId = 1;  // Supponiamo che l'utente loggato abbia ID = 1 (questo dovrebbe essere dinamico)
-   
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user?.id;
+    if (!userId) {
+      console.error("ID utente non trovato nella sessione.");
+      return;
+    }
+
     this.isLoading = true;
     fetch(`http://localhost:8000/my-reservations/${userId}`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         this.isLoading = false;
-        if (data.success) {
-          this.prenotazioni = data.prenotazioni;
-        } else {
-          console.error('Errore nel recupero delle prenotazioni:', data.error);
-          this.prenotazioni = [];
-        }
+        this.prenotazioni = data.success ? data.prenotazioni : [];
       })
-      .catch((error) => {
+      .catch(err => {
         this.isLoading = false;
-        console.error('Errore nella richiesta delle prenotazioni:', error);
+        console.error('Errore caricamento:', err);
         this.prenotazioni = [];
       });
   }
 };
-
-
 
 
 
