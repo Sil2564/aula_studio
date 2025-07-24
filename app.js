@@ -99,11 +99,7 @@ const aiuto = {
                   <ul>
                       <li><strong>Non riesco ad accedere al mio account. Cosa devo fare?</strong><br>
                           Assicurati di aver inserito la mail e la password corretti.<br>
-                          Usa la funzione <em>Recupera password</em> se hai dimenticato le credenziali.<br>
                           Se il problema persiste, contattaci.
-                      </li>
-                      <li><strong>Come posso aggiornare i miei dati personali?</strong><br>
-                          Accedi al tuo account, vai nella sezione <em>Impostazioni personali</em> e modifica le informazioni necessarie.
                       </li>
                       <li><strong>Come cancello il mio account?</strong><br>
                           Se desideri eliminare il tuo account, contattaci direttamente all’indirizzo email:
@@ -115,7 +111,7 @@ const aiuto = {
                   <strong>Uso dell'Aula Studio</strong><br>
                   <ul>
                       <li><strong>Devo fare il check-in quando arrivo?</strong><br>
-                          No, ti basterà occupare la postazione con il numero indicato nella mail di conferma.
+                          No, ti basterà occupare la tua postazione.
                       </li>
                       <li><strong>Cosa succede se non mi presento?</strong><br>
                           Se non ti presenti entro 15 minuti dall’orario di inizio prenotato, il tuo posto sarà rilasciato per altri utenti.
@@ -275,8 +271,8 @@ const panoramica = {
           <p>Una volta che tutte le informazioni sono state inserite, clicca sul pulsante “Prenota” per finalizzare la tua richiesta. Riceverai una conferma della prenotazione.</p>
         </div>
         <div class="step">
-          <h3>4. Visualizza il numero del tavolo assegnato</h3>
-          <p>Una volta effettuata la prenotazione, nella sezione "Le mie prenotazioni" potrai visualizzare il numero del tavolo che ti è stato assegnato. Assicurati di controllare questa sezione per ulteriori dettagli.</p>
+          <h3>4. Visualizza la prenotazione</h3>
+          <p>Una volta effettuata la prenotazione, nella sezione "Le mie prenotazioni" potrai visualizzare i dati relativi alla tua prenotazione, ed eventualmente cancellarla.<p>
         </div>
       </div>
     </section>
@@ -524,6 +520,7 @@ const prenota2 = {
 
     <div v-if="isAvailable && !isBookingConfirmed">
       <button @click="showConfirmation">Conferma Prenotazione</button>
+      <p v-if="bookingMessage" class="success">{{ bookingMessage }}</p>
     </div>
 
     <div v-if="isBookingConfirmed">
@@ -577,6 +574,7 @@ const prenota2 = {
         label: `${8 + i}:00 - ${9 + i}:00`
       })),
       availabilityMessage: '',
+      bookingMessage: '',
       isAvailable: false,
       isBookingConfirmed: false,
       prenotazioni: [],
@@ -625,8 +623,7 @@ const prenota2 = {
     },
 
     async showConfirmation() {
-      const conferma = window.confirm('Vuoi confermare la prenotazione?');
-      if (conferma) await this.confirmBooking();
+      await this.confirmBooking(); // Nessun popup
     },
 
     async confirmBooking() {
@@ -652,26 +649,26 @@ const prenota2 = {
         if (result.success) {
           this.isBookingConfirmed = true;
           this.prenotazioni.push(result.booking);
+          this.bookingMessage = result.message;
+        } else {
+          this.bookingMessage = result.error || "Errore durante la prenotazione.";
         }
-        alert(result.message);
       } catch (err) {
         console.error('Errore prenotazione:', err);
+        this.bookingMessage = "Si è verificato un errore.";
       }
     },
 
     async deleteReservation(id) {
-      
       if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) {
         return;
       }
       try {
-        
         const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, {
           method: 'DELETE'
         });
         const json = await res.json();
         if (json.success) {
-          
           this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
         } else {
           alert('Errore: ' + (json.error || 'impossibile cancellare'));
@@ -680,26 +677,25 @@ const prenota2 = {
         console.error('Delete error:', err);
         alert('Si è verificato un errore durante la cancellazione.');
       }
-    
+    },
+
+    reloadPage() {
+      window.location.reload();
+    }
   },
-    
+
   watch: {
     slot(newSlot) {
       const slotInt = parseInt(newSlot);
       if (slotInt === 12) {
         this.durataOpzioni = [1];
-        if (this.durata > 1) this.durata = 1; // forza 1h se era 2
+        if (this.durata > 1) this.durata = 1;
       } else {
         this.durataOpzioni = [1, 2];
       }
     }
   },
 
-
-    reloadPage() {
-      window.location.reload();
-    }
-  },
   mounted() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const userId = user?.id;
@@ -725,6 +721,7 @@ const prenota2 = {
 
 
 
+
 const regolamento = {
   template: `
       <section class="page-container">
@@ -741,7 +738,7 @@ const regolamento = {
               </li>
               <li>
                   <strong>Prenotazioni</strong><br>
-                  Ogni utente può prenotare un massimo di 2 sessioni al giorno, ogni sessione può essere della durata di 1, 2 o 3 ore.<br>
+                  Ogni sessione può essere della durata di 1 o 2 ore.<br>
                   Le prenotazioni devono essere effettuate online tramite il nostro portale sul sito ufficiale.<br>
                   La cancellazione della prenotazione è possibile fino a 10 minuti prima dell'orario di inizio.
               </li>
