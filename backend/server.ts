@@ -60,7 +60,6 @@ app.post('/register', (req: Request, res: Response) => {
   try {
     const stmt = db.prepare(`INSERT INTO users (nome, cognome, matricola, corso, anno, email, password)
                              VALUES (?, ?, ?, ?, ?, ?, ?)`);
-
     const info = stmt.run(nome, cognome, matricola, corso, anno, email, password);
     res.status(200).json({ success: true, message: 'Registrazione avvenuta con successo!', id: info.lastInsertRowid });
   } catch (err: any) {
@@ -197,6 +196,45 @@ app.delete('/prenotazioni/:id', (req: Request, res: Response) => {
   } catch (err: any) {
     console.error('Errore durante la cancellazione:', err.message);
     res.status(500).json({ success: false, error: 'Errore interno.' });
+  }
+});
+
+// ------------------- MODIFICA PRENOTAZIONE -------------------
+app.put('/prenotazioni/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const { data, ora_inizio, ora_fine, numero_persone }: Prenotazione = req.body;
+
+  try {
+    // Verifica che la prenotazione esista
+    const checkStmt = db.prepare(`SELECT * FROM prenotazioni WHERE id = ?`);
+    const existing = checkStmt.get(id);
+
+    if (!existing) {
+      return res.status(404).json({ success: false, error: 'Prenotazione non trovata.' });
+    }
+
+    // Aggiorna la prenotazione
+    const updateStmt = db.prepare(`
+      UPDATE prenotazioni
+      SET data = ?, ora_inizio = ?, ora_fine = ?, numero_persone = ?
+      WHERE id = ?
+    `);
+    updateStmt.run(data, ora_inizio, ora_fine, numero_persone, id);
+
+    res.json({
+      success: true,
+      message: 'Prenotazione aggiornata con successo!',
+      booking: {
+        id,
+        data,
+        ora_inizio,
+        ora_fine,
+        numero_persone
+      }
+    });
+  } catch (err: any) {
+    console.error('Errore aggiornamento prenotazione:', err.message);
+    res.status(500).json({ success: false, error: 'Errore durante l\'aggiornamento.' });
   }
 });
 

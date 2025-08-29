@@ -551,6 +551,7 @@ const prenota2 = {
           <td>{{ convertiSlot(booking.ora_fine) }}</td>
           <td>{{ booking.numero_persone }}</td>
           <td>
+            <button @click="updateReservation(booking)">Modifica</button>
             <button @click="deleteReservation(booking.id)">Cancella</button>
           </td>
         </tr>
@@ -676,6 +677,46 @@ const prenota2 = {
       } catch (err) {
         console.error('Delete error:', err);
         alert('Si è verificato un errore durante la cancellazione.');
+      }
+    },
+
+    async updateReservation(booking) {
+      const nuovaData = prompt("Nuova data (YYYY-MM-DD):", booking.data);
+      const nuovoInizio = prompt("Nuovo slot di inizio:", booking.ora_inizio);
+      const nuovaFine = prompt("Nuovo slot di fine:", booking.ora_fine);
+      const nuovePersone = prompt("Numero di persone:", booking.numero_persone);
+
+      if (!nuovaData || !nuovoInizio || !nuovaFine || !nuovePersone) return;
+
+      try {
+        const res = await fetch(`http://localhost:8000/prenotazioni/${booking.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: nuovaData,
+            ora_inizio: parseInt(nuovoInizio),
+            ora_fine: parseInt(nuovaFine),
+            numero_persone: parseInt(nuovePersone),
+          })
+        });
+        const json = await res.json();
+        if (json.success) {
+          const idx = this.prenotazioni.findIndex(b => b.id === booking.id);
+          if (idx !== -1) {
+            this.prenotazioni[idx] = {
+              ...booking,
+              data: nuovaData,
+              ora_inizio: parseInt(nuovoInizio),
+              ora_fine: parseInt(nuovaFine),
+              numero_persone: parseInt(nuovePersone)
+            };
+          }
+        } else {
+          alert('Errore: ' + (json.error || 'impossibile modificare'));
+        }
+      } catch (err) {
+        console.error('Update error:', err);
+        alert('Si è verificato un errore durante la modifica.');
       }
     },
 
