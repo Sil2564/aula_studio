@@ -489,7 +489,6 @@ const registrati = {
 }    
 
 
-
 const prenota2 = {
   template: `
   <section>
@@ -499,12 +498,12 @@ const prenota2 = {
       <input type="date" v-model="data" id="data" required />
 
       <label for="slot">Ora di inizio:</label>
-      <select v-model="slot" id="slot" required>
+      <select v-model.number="slot" id="slot" required>
         <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
       </select>
 
       <label for="durata">Durata (ore):</label>
-      <select v-model="durata" id="durata" required>
+      <select v-model.number="durata" id="durata" required>
         <option v-for="n in durataMassima" :key="n" :value="n">{{ n }}</option>
       </select>
 
@@ -551,7 +550,7 @@ const prenota2 = {
           <td>{{ convertiSlot(booking.ora_fine) }}</td>
           <td>{{ booking.numero_persone }}</td>
           <td>
-            <button @click="updateReservation(booking)">Modifica</button>
+            <button @click="openModal(booking)">Modifica</button>
             <button @click="deleteReservation(booking.id)">Cancella</button>
           </td>
         </tr>
@@ -560,6 +559,32 @@ const prenota2 = {
 
     <div v-if="isLoading">
       <p>Caricamento delle prenotazioni...</p>
+    </div>
+
+    <!-- MODALE PER MODIFICA -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h3>Modifica prenotazione</h3>
+
+        <label>Data:</label>
+        <input type="date" v-model="prenotazioneSelezionata.data" />
+
+        <label>Ora inizio:</label>
+        <select v-model.number="prenotazioneSelezionata.ora_inizio">
+          <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
+        </select>
+
+        <label>Durata (ore):</label>
+        <select v-model.number="prenotazioneSelezionata.durata">
+          <option v-for="n in (prenotazioneSelezionata.ora_inizio === 12 ? [1] : [1,2])" :key="n" :value="n">{{ n }}</option>
+        </select>
+
+        <label>Numero persone:</label>
+        <input type="number" v-model.number="prenotazioneSelezionata.numero_persone" min="1" max="4" />
+
+        <button @click="salvaModifica">Salva</button>
+        <button @click="chiudiModale">Annulla</button>
+      </div>
     </div>
   </section>
   `,
@@ -572,7 +597,7 @@ const prenota2 = {
       posti: 1,
       orari: Array.from({ length: 12 }, (_, i) => ({
         slot: i + 1,
-        label: `${8 + i}:00 - ${9 + i}:00`
+        label: `${8 + i}:00`
       })),
       availabilityMessage: '',
       bookingMessage: '',
@@ -580,6 +605,8 @@ const prenota2 = {
       isBookingConfirmed: false,
       prenotazioni: [],
       isLoading: true,
+      showModal: false,
+      prenotazioneSelezionata: null
     };
   },
   computed: {
@@ -587,7 +614,6 @@ const prenota2 = {
       return this.slot === 12 ? 1 : 2;
     }
   },
-
   methods: {
     convertiSlot(slot) {
       const ora = 8 + (parseInt(slot) - 1);
@@ -595,128 +621,99 @@ const prenota2 = {
     },
 
     async checkAvailability() {
-      try {
-        const slotInizio = parseInt(this.slot);
-        const slotFine = slotInizio + parseInt(this.durata);
+      const slotInizio = parseInt(this.slot);
+      const slotFine = slotInizio + parseInt(this.durata);
 
-        const response = await fetch('http://localhost:8000/check-availability', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            data: this.data,
-            ora_inizio: slotInizio,
-            ora_fine: slotFine,
-            numero_persone: this.posti
-          }),
-        });
+      const response = await fetch('http://localhost:8000/check-availability', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: this.data,
+          ora_inizio: slotInizio,
+          ora_fine: slotFine,
+          numero_persone: this.posti
+        }),
+      });
 
-        const result = await response.json();
-        if (result.success) {
-          this.isAvailable = true;
-          this.availabilityMessage = 'Posti disponibili!';
-        } else {
-          this.isAvailable = false;
-          this.availabilityMessage = result.error;
-        }
-      } catch (err) {
-        console.error('Errore nella verifica:', err);
+      const result = await response.json();
+      if (result.success) {
+        this.isAvailable = true;
+        this.availabilityMessage = 'Posti disponibili!';
+      } else {
+        this.isAvailable = false;
+        this.availabilityMessage = result.error;
       }
     },
 
     async showConfirmation() {
-      await this.confirmBooking(); // Nessun popup
+      await this.confirmBooking();
     },
 
     async confirmBooking() {
-      try {
-        const userId = JSON.parse(sessionStorage.getItem('user'))?.id || 1;
+      const userId = JSON.parse(sessionStorage.getItem('user'))?.id || 1;
+      const slotInizio = parseInt(this.slot);
+      const slotFine = slotInizio + parseInt(this.durata);
 
-        const slotInizio = parseInt(this.slot);
-        const slotFine = slotInizio + parseInt(this.durata);
+      const response = await fetch('http://localhost:8000/make-reservation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          data: this.data,
+          ora_inizio: slotInizio,
+          ora_fine: slotFine,
+          numero_persone: this.posti
+        }),
+      });
 
-        const response = await fetch('http://localhost:8000/make-reservation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: userId,
-            data: this.data,
-            ora_inizio: slotInizio,
-            ora_fine: slotFine,
-            numero_persone: this.posti
-          }),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-          this.isBookingConfirmed = true;
-          this.prenotazioni.push(result.booking);
-          this.bookingMessage = result.message;
-        } else {
-          this.bookingMessage = result.error || "Errore durante la prenotazione.";
-        }
-      } catch (err) {
-        console.error('Errore prenotazione:', err);
-        this.bookingMessage = "Si è verificato un errore.";
+      const result = await response.json();
+      if (result.success) {
+        this.isBookingConfirmed = true;
+        this.prenotazioni.push(result.booking);
+        this.bookingMessage = result.message;
+      } else {
+        this.bookingMessage = result.error || "Errore durante la prenotazione.";
       }
     },
 
     async deleteReservation(id) {
-      if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) {
-        return;
-      }
-      try {
-        const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, {
-          method: 'DELETE'
-        });
-        const json = await res.json();
-        if (json.success) {
-          this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
-        } else {
-          alert('Errore: ' + (json.error || 'impossibile cancellare'));
-        }
-      } catch (err) {
-        console.error('Delete error:', err);
-        alert('Si è verificato un errore durante la cancellazione.');
-      }
+      if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) return;
+      const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, { method: 'DELETE' });
+      const json = await res.json();
+      if (json.success) this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
+      else alert('Errore: ' + (json.error || 'impossibile cancellare'));
     },
 
-    async updateReservation(booking) {
-      const nuovaData = prompt("Nuova data (YYYY-MM-DD):", booking.data);
-      const nuovoInizio = prompt("Nuovo slot di inizio:", booking.ora_inizio);
-      const nuovaFine = prompt("Nuovo slot di fine:", booking.ora_fine);
-      const nuovePersone = prompt("Numero di persone:", booking.numero_persone);
+    openModal(booking) {
+      this.prenotazioneSelezionata = { ...booking };
+      this.showModal = true;
+    },
 
-      if (!nuovaData || !nuovoInizio || !nuovaFine || !nuovePersone) return;
+    chiudiModale() {
+      this.showModal = false;
+      this.prenotazioneSelezionata = null;
+    },
 
-      try {
-        const res = await fetch(`http://localhost:8000/prenotazioni/${booking.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            data: nuovaData,
-            ora_inizio: parseInt(nuovoInizio),
-            ora_fine: parseInt(nuovaFine),
-            numero_persone: parseInt(nuovePersone),
-          })
-        });
-        const json = await res.json();
-        if (json.success) {
-          const idx = this.prenotazioni.findIndex(b => b.id === booking.id);
-          if (idx !== -1) {
-            this.prenotazioni[idx] = {
-              ...booking,
-              data: nuovaData,
-              ora_inizio: parseInt(nuovoInizio),
-              ora_fine: parseInt(nuovaFine),
-              numero_persone: parseInt(nuovePersone)
-            };
-          }
-        } else {
-          alert('Errore: ' + (json.error || 'impossibile modificare'));
-        }
-      } catch (err) {
-        console.error('Update error:', err);
-        alert('Si è verificato un errore durante la modifica.');
+    async salvaModifica() {
+      const b = this.prenotazioneSelezionata;
+      const res = await fetch(`http://localhost:8000/prenotazioni/${b.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: b.data,
+          ora_inizio: parseInt(b.ora_inizio),
+          ora_fine: parseInt(b.ora_inizio) + parseInt(b.durata),
+          numero_persone: parseInt(b.numero_persone)
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        const idx = this.prenotazioni.findIndex(p => p.id === b.id);
+        if (idx !== -1) this.prenotazioni[idx] = json.booking;
+        this.chiudiModale();
+      } else {
+        alert('Errore: ' + (json.error || 'impossibile modificare'));
       }
     },
 
@@ -728,29 +725,22 @@ const prenota2 = {
   watch: {
     slot(newSlot) {
       const slotInt = parseInt(newSlot);
-      if (slotInt === 12) {
-        this.durataOpzioni = [1];
-        if (this.durata > 1) this.durata = 1;
-      } else {
-        this.durataOpzioni = [1, 2];
-      }
+      if (slotInt === 12) this.durataOpzioni = [1];
+      else this.durataOpzioni = [1, 2];
     }
   },
 
   mounted() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    const userId = user?.id;
-    if (!userId) {
-      console.error("ID utente non trovato nella sessione.");
-      return;
-    }
+    const userId = JSON.parse(sessionStorage.getItem('user'))?.id;
+    if (!userId) return console.error("ID utente non trovato nella sessione.");
 
     this.isLoading = true;
     fetch(`http://localhost:8000/my-reservations/${userId}`)
       .then(res => res.json())
       .then(data => {
         this.isLoading = false;
-        this.prenotazioni = data.success ? data.prenotazioni : [];
+        if (data.success) this.prenotazioni = data.prenotazioni;
+        else this.prenotazioni = [];
       })
       .catch(err => {
         this.isLoading = false;
@@ -759,8 +749,6 @@ const prenota2 = {
       });
   }
 };
-
-
 
 
 const regolamento = {
