@@ -196,7 +196,7 @@ const eventi = {
                   id: 1,
                   title: "Conferenza: 'Le Nuove Frontiere dell'Intelligenza Artificiale'",
                   dateISO: '2025-02-03',
-                  date: 'Mercoledì, 3 Febbraio 2025',
+                  date: 'Mercoledì, 12 Settembre 2025',
                   time: '17:00 - 19:00',
                   description: 'Un approfondimento sul futuro dell’intelligenza artificiale e il suo impatto sulla società, con il professore di tecnologia Alessandro Greco. Evento ideale per appassionati di tecnologia, innovazione e filosofia.'
               },
@@ -204,7 +204,7 @@ const eventi = {
                   id: 2,
                   title: "Workshop: 'Adolescenti e Social Media – Tra Opportunità e Rischi'",
                   dateISO: '2025-03-20',
-                  date: 'Martedì, 20 Marzo 2025',
+                  date: 'Martedì, 17 Settembre 2025',
                   time: '16:00 - 18:00',
                   description: 'Un incontro interattivo per genitori, educatori e adolescenti sul rapporto tra giovani e social media. Scopri come promuovere un uso consapevole delle piattaforme digitali.',
                   speakers: 'Psicologa dell’età evolutiva Dr.ssa Claudia Ferri, Esperto di comunicazione digitale Luca Verri'
@@ -213,7 +213,7 @@ const eventi = {
                   id: 3,
                   title: "Conferenza: 'Cybersecurity – Proteggere i Giovani nel Mondo Digitale'",
                   dateISO: '2025-03-04',
-                  date: 'Venerdì, 4 Marzo 2025',
+                  date: 'Venerdì, 22 Settembre 2025',
                   time: '9:00 - 11:00',
                   description: 'Scopri come proteggere la tua privacy e prevenire cybercrimini. Il focus sarà sull’educazione digitale per adolescenti e genitori, con strategie pratiche per navigare in sicurezza.',
                   speakers: 'Etico Hacker Andrea Conti, Giurista esperto di privacy Dr.ssa Elena Russo'
@@ -222,7 +222,7 @@ const eventi = {
                   id: 4,
                   title: "Evento: 'Sicurezza Stradale, non rischiare'",
                   dateISO: '2025-02-13',
-                  date: 'Lunedì, 13 Febbraio 2025',
+                  date: 'Lunedì, 2 Ottobre 2025',
                   time: '15:00 - 17:00',
                   description: 'Una giornata dedicata alla sensibilizzazione sulla sicurezza stradale. Parleremo di guida responsabile, con dimostrazioni pratiche e testimonianze.',
                   speakers: 'Istruttore di guida sicura Marco Rinaldi, Rappresentanti della Polizia Locale'
@@ -231,7 +231,7 @@ const eventi = {
                   id: 5,
                   title: "Talk: 'Agenda 2030 – Il Futuro in Mano ai Giovani'",
                   dateISO: '2025-02-22',
-                  date: 'Sabato, 22 Febbraio 2025',
+                  date: 'Sabato, 10 Ottobre 2025',
                   time: '16:00 - 18:00',
                   description: 'Un dibattito interattivo per esplorare gli obiettivi di sviluppo sostenibile dell’Agenda 2030, con focus su istruzione di qualità, parità di genere e cambiamento climatico.',
                   speakers: 'Educatore ambientale Giorgio Neri, Attivista per i diritti umani Sara Bellini'
@@ -498,7 +498,7 @@ const registrati = {
 const prenota2 = {
   template: `
   <section>
-    <h2>Effettua una Prenotazione</h2>
+    <h2>Effettua una Prenotazione</h2><br>
     <form v-if="!isBookingConfirmed" @submit.prevent="checkAvailability" class="w-100 mx-auto" style="max-width: 500px;">
       <div class="mb-3">
         <label for="data" class="form-label">Data:</label>
@@ -527,21 +527,25 @@ const prenota2 = {
       <button type="submit" class="btn btn-primary w-100">Verifica Disponibilità</button>
     </form>
 
-    <div v-if="availabilityMessage && !isBookingConfirmed" :class="{ success: isAvailable, error: !isAvailable }">
+    <div v-if="availabilityMessage && !isBookingConfirmed" 
+        :class="['alert', isAvailable ? 'alert-success' : 'alert-danger', 'mt-3']">
       {{ availabilityMessage }}
     </div>
 
-    <div v-if="isAvailable && !isBookingConfirmed">
-      <button @click="showConfirmation">Conferma Prenotazione</button>
-      <p v-if="bookingMessage" class="success">{{ bookingMessage }}</p>
+    <div v-if="isAvailable && !isBookingConfirmed" class="mt-3">
+      <button @click="showConfirmation" class="btn btn-success w-100">Conferma Prenotazione</button>
+      <p v-if="bookingMessage" class="alert alert-success mt-2">{{ bookingMessage }}</p>
     </div>
 
-    <div v-if="isBookingConfirmed">
-      <p>La tua prenotazione è stata confermata!</p>
-      <a href="#" @click.prevent="reloadPage">Prenota un'altra sessione</a>
+    <div v-if="isBookingConfirmed" class="mt-3 text-center">
+      <p class="alert alert-success">La tua prenotazione è stata confermata!</p>
+      <a href="#" @click.prevent="reloadPage" class="btn btn-link">Prenota un'altra sessione</a>
     </div>
 
-    <h3>Le mie prenotazioni</h3>
+
+    <br><br>
+
+    <h3>Le mie prenotazioni</h3><br>
 
     <div v-if="!isLoading && prenotazioni.length === 0">
       <p>Non hai ancora prenotazioni.</p>
