@@ -44,12 +44,12 @@ app.use(express.json()); // sostituisce body-parser
 // Servire i file statici del frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
+// ------------------- ROTTE -------------------
+
 // Rotta per la home
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
-
-// ------------------- ROUTE -------------------
 
 // Registrazione utente
 app.post('/register', (req: Request, res: Response) => {
@@ -146,16 +146,12 @@ app.post('/make-reservation', (req: Request, res: Response) => {
     `);
     const info = stmt.run(user_id, data, ora_inizio, ora_fine, numero_persone);
 
+    const prenotazione: Prenotazione = { id: info.lastInsertRowid, user_id, data, ora_inizio, ora_fine, numero_persone };
+
     res.json({
       success: true,
       message: 'Prenotazione effettuata con successo!',
-      booking: {
-        id: info.lastInsertRowid,
-        data,
-        ora_inizio,
-        ora_fine,
-        numero_persone
-      }
+      booking: prenotazione
     });
   } catch (err: any) {
     console.error('Errore inserimento prenotazione:', err.message);
@@ -221,16 +217,12 @@ app.put('/prenotazioni/:id', (req: Request, res: Response) => {
     `);
     updateStmt.run(data, ora_inizio, ora_fine, numero_persone, id);
 
+    const prenotazione: Prenotazione = { id, user_id: existing.user_id, data, ora_inizio, ora_fine, numero_persone };
+
     res.json({
       success: true,
       message: 'Prenotazione aggiornata con successo!',
-      booking: {
-        id,
-        data,
-        ora_inizio,
-        ora_fine,
-        numero_persone
-      }
+      booking: prenotazione
     });
   } catch (err: any) {
     console.error('Errore aggiornamento prenotazione:', err.message);
