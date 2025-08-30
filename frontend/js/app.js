@@ -3,8 +3,8 @@ const Home = {
   <section>
       <h2>Benvenuto nell'Aula Studio!</h2>
       <div class="page-container">
-          <div class="home-section">
-              <h3>Un Ambiente Perfetto per il Tuo Studio</h3>
+          <div class="home-section card mb-4 shadow p-3">
+              <h3 class="card-title text-danger">Un Ambiente Perfetto per il Tuo Studio</h3>
               <p>
                   L'Aula Studio è il luogo ideale per concentrarti, studiare in tranquillità e massimizzare la tua produttività. Con spazi ben organizzati, un'atmosfera silenziosa e risorse moderne, abbiamo creato l'ambiente perfetto per ogni tipo di studio.
               </p>
@@ -13,9 +13,8 @@ const Home = {
               </p>
           </div>
 
-
-          <div class="home-section">
-              <h3>Cos'è l'Aula Studio?</h3>
+          <div class="home-section card mb-4 shadow p-3">
+              <h3 class="card-title text-danger">Cos'è l'Aula Studio?</h3>
               <p>
                   L'Aula Studio è una struttura pensata per offrire ai suoi utenti un luogo sereno, sicuro e attrezzato dove studiare individualmente o in gruppo. Ogni postazione è dotata di Wi-Fi ad alta velocità, prese di corrente, e scrivanie spaziose.
               </p>
@@ -24,10 +23,9 @@ const Home = {
               </p>
           </div>
 
-
-          <div class="home-section">
-              <h3>Vantaggi della Nostra Aula Studio</h3>
-              <ul>
+          <div class="home-section card mb-4 shadow p-3">
+              <h3 class="card-title text-danger">Vantaggi della Nostra Aula Studio</h3>
+              <ul class="list-unstyled">
                   <li><strong>Ambiente tranquillo:</strong> ideale per concentrarti e lavorare senza distrazioni.</li>
                   <li><strong>Postazioni attrezzate:</strong> scrivanie ampie, Wi-Fi veloce, prese di corrente.</li>
                   <li><strong>Flessibilità nella prenotazione:</strong> scegli l'orario che preferisci e prenota facilmente.</li>
@@ -35,9 +33,8 @@ const Home = {
               </ul>
           </div>
 
-
-          <div class="home-section">
-              <h3>Unisciti a Noi!</h3>
+          <div class="home-section card mb-4 shadow p-3">
+              <h3 class="card-title text-danger">Unisciti a Noi!</h3>
               <p>
                   Siamo sempre pronti ad accoglierti con entusiasmo! Prenota il tuo posto nell'Aula Studio e inizia a studiare in un ambiente che stimola la concentrazione e la produttività. Che aspetti? Unisciti alla nostra community di studenti e professionisti!
               </p>
@@ -45,44 +42,38 @@ const Home = {
       </div>
   </section>`,
   mounted() {
-    // Eventuali funzionalità JS
+   
   }
 };
 
 
-
 const contatti = {
   template: `
-  <section>
+    <section>
       <h2>Contatti</h2>
-          <ul class="contatti-list">
-              <li>
-                  <strong>Orari aula studio:</strong><br>
-                      Aperta tutti i giorni dalle 8:00 alle 20:00
-              </li>
-              <li>
-                  <strong>Numero di telefono:</strong><br>
-                  <a href="tel:+1234567890" title="Chiama">
-                  +1234567890
-                  </a>
-              </li>
-              <li>
-                  <strong>Email:</strong><br>
-                  <a href="mailto:info@laulastudio.com" title="Manda Email">
-                  info@laulastudio.com
-                  </a>
-              </li>
-              <li>
-                  <strong>Indirizzo:</strong><br>
-                  <a href="https://www.google.com/maps" title="Posizione">
-                      Via Cesare Pavese, 50, 47521 Cesena FC
-                  </a>
-              </li>
+          <ul class="w-100 mx-auto" style="max-width: 800px; padding-left: 0; list-style-type: none;">
+            <li class="mb-3">
+              <strong class="text-danger" style="font-size: 1.4rem;">Orari aula studio:</strong><br>
+              Aperta tutti i giorni dalle 8:00 alle 20:00
+            </li>
+            <li class="mb-3">
+              <strong class="text-danger" style="font-size: 1.4rem;">Numero di telefono:</strong><br>
+              <a href="tel:+1234567890" title="Chiama" class="text-decoration-none">+1234567890</a>
+            </li>
+            <li class="mb-3">
+              <strong class="text-danger" style="font-size: 1.4rem;">Email:</strong><br>
+              <a href="mailto:info@laulastudio.com" title="Manda Email" class="text-decoration-none">info@laulastudio.com</a>
+            </li>
+            <li class="mb-3">
+              <strong class="text-danger" style="font-size: 1.4rem;">Indirizzo:</strong><br>
+              <a href="https://www.google.com/maps" title="Posizione" class="text-decoration-none">
+                Via Cesare Pavese, 50, 47521 Cesena FC
+              </a>
+            </li>
           </ul>
-      </section>
+    </section>
       `,
 };
-
 
 
 const aiuto = {
@@ -93,77 +84,84 @@ const aiuto = {
               Benvenuto nella pagina di supporto! Qui troverai tutte le informazioni utili per utilizzare al meglio il nostro sistema di gestione dell’aula studio.
               Se hai bisogno di ulteriore assistenza, siamo a tua disposizione.
           </p>
-          <ol class="supporto-list">
-              <li>
-                  <strong>Gestione Account</strong><br>
-                  <ul>
-                      <li><strong>Non riesco ad accedere al mio account. Cosa devo fare?</strong><br>
-                          Assicurati di aver inserito la mail e la password corretti.<br>
-                          Se il problema persiste, contattaci.
-                      </li>
-                      <li><strong>Come cancello il mio account?</strong><br>
-                          Se desideri eliminare il tuo account, contattaci direttamente all’indirizzo email:
-                          <a href="mailto:info@laulastudio.com">info@laulastudio.com</a>.
-                      </li>
-                  </ul>
-              </li>
-              <li>
-                  <strong>Uso dell'Aula Studio</strong><br>
-                  <ul>
-                      <li><strong>Devo fare il check-in quando arrivo?</strong><br>
-                          No, ti basterà occupare la tua postazione.
-                      </li>
-                      <li><strong>Cosa succede se non mi presento?</strong><br>
-                          Se non ti presenti entro 15 minuti dall’orario di inizio prenotato, il tuo posto sarà rilasciato per altri utenti.
-                      </li>
-                      <li><strong>Posso condividere la mia prenotazione con un amico?</strong><br>
-                          No, le prenotazioni sono personali e non trasferibili.
-                      </li>
-                  </ul>
-              </li>
-              <li>
-                  <strong>Risoluzione dei Problemi</strong><br>
-                  <ul>
-                      <li><strong>Non riesco a completare una prenotazione. Cosa devo fare?</strong><br>
-                          Assicurati che la connessione Internet sia stabile.<br>
-                          Verifica di aver inserito il codice matricola.<br>
-                          Prova a uscire e rientrare dal tuo account.
-                      </li>
-                      <li><strong>Il sistema segnala che l’aula è piena. Come mi organizzo?</strong><br>
-                          Puoi scegliere un altro orario o un altro giorno.
-                      </li>
-                  </ul>
-              </li>
-              <li>
-                  <strong>Domande Frequenti</strong><br>
-                  <ul>
-                      <li><strong>Quali sono gli orari dell’aula studio?</strong><br>
-                          Gli orari sono disponibili nella sezione <em>Informazioni sull’aula</em>. In generale, siamo aperti tutti i giorni dalle 8:00 alle 20:00.
-                      </li>
-                      <li><strong>Ci sono costi per l’utilizzo del servizio?</strong><br>
-                          No, ma come requisito devi essere studente iscritto all’università.
-                      </li>
-                  </ul>
-              </li>
-              <li>
-                  <strong>Regolamento e Sicurezza</strong><br>
-                  <ul>
-                      <li><strong>Quali sono le regole di utilizzo?</strong><br>
-                          Trovi il regolamento completo nella pagina <em>Regolamento dell’Aula Studio</em>.
-                      </li>
-                      <li><strong>Come viene garantita la sicurezza in aula?</strong><br>
-                          L’aula è monitorata da personale e videocamere. Inoltre, ogni prenotazione è registrata per garantire il tracciamento degli accessi.
-                      </li>
-                  </ul>
-              </li>
-              <li>
-                  <strong>Come Contattarci</strong><br>
-                  Se non hai trovato la risposta che cercavi, contattaci!<br>
-                  Email: <a href="mailto:info@laulastudio.com">info@laulastudio.com</a><br>
-                  Telefono: <a href="tel:+391234567890">+39 123 456 7890</a><br>
-                 
-              </li>
+          <ol class="w-100 mx-auto" style="max-width: 800px; padding-left: 0; list-style-type: decimal;">
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Gestione Account</strong><br>
+              <ul style="padding-left: 20px; list-style-type: disc;">
+                <li class="mb-2">
+                  <strong>Non riesco ad accedere al mio account. Cosa devo fare?</strong><br>
+                  Assicurati di aver inserito la mail e la password corretti.<br>
+                  Se il problema persiste, contattaci.
+                </li>
+                <li class="mb-2">
+                  <strong>Come cancello il mio account?</strong><br>
+                  Se desideri eliminare il tuo account, contattaci direttamente all’indirizzo email:
+                  <a href="mailto:info@laulastudio.com">info@laulastudio.com</a>.
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Uso dell'Aula Studio</strong><br>
+              <ul style="padding-left: 20px; list-style-type: disc;">
+                <li class="mb-2"><strong>Devo fare il check-in quando arrivo?</strong><br>
+                  No, ti basterà occupare la tua postazione.
+                </li>
+                <li class="mb-2"><strong>Cosa succede se non mi presento?</strong><br>
+                  Se non ti presenti entro 15 minuti dall’orario di inizio prenotato, il tuo posto sarà rilasciato per altri utenti.
+                </li>
+                <li class="mb-2"><strong>Posso condividere la mia prenotazione con un amico?</strong><br>
+                  No, le prenotazioni sono personali e non trasferibili.
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Risoluzione dei Problemi</strong><br>
+              <ul style="padding-left: 20px; list-style-type: disc;">
+                <li class="mb-2"><strong>Non riesco a completare una prenotazione. Cosa devo fare?</strong><br>
+                  Assicurati che la connessione Internet sia stabile.<br>
+                  Verifica di aver inserito il codice matricola.<br>
+                  Prova a uscire e rientrare dal tuo account.
+                </li>
+                <li class="mb-2"><strong>Il sistema segnala che l’aula è piena. Come mi organizzo?</strong><br>
+                  Puoi scegliere un altro orario o un altro giorno.
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Domande Frequenti</strong><br>
+              <ul style="padding-left: 20px; list-style-type: disc;">
+                <li class="mb-2"><strong>Quali sono gli orari dell’aula studio?</strong><br>
+                  Gli orari sono disponibili nella sezione <em>Informazioni sull’aula</em>. In generale, siamo aperti tutti i giorni dalle 8:00 alle 20:00.
+                </li>
+                <li class="mb-2"><strong>Ci sono costi per l’utilizzo del servizio?</strong><br>
+                  No, ma come requisito devi essere studente iscritto all’università.
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Regolamento e Sicurezza</strong><br>
+              <ul style="padding-left: 20px; list-style-type: disc;">
+                <li class="mb-2"><strong>Quali sono le regole di utilizzo?</strong><br>
+                  Trovi il regolamento completo nella pagina <em>Regolamento dell’Aula Studio</em>.
+                </li>
+                <li class="mb-2"><strong>Come viene garantita la sicurezza in aula?</strong><br>
+                  L’aula è monitorata da personale e videocamere. Inoltre, ogni prenotazione è registrata per garantire il tracciamento degli accessi.
+                </li>
+              </ul>
+            </li>
+
+            <li class="mb-4">
+              <strong class="text-danger" style="font-size: 1.4rem;">Come Contattarci</strong><br>
+              Se non hai trovato la risposta che cercavi, contattaci!<br>
+              Email: <a href="mailto:info@laulastudio.com">info@laulastudio.com</a><br>
+              Telefono: <a href="tel:+391234567890">+39 123 456 7890</a>
+            </li>
           </ol>
+
           <p>
               Grazie per aver scelto il nostro servizio di aula studio!<br>
               Il nostro obiettivo è offrire un’esperienza confortevole e organizzata. Se hai suggerimenti, faccelo sapere!
@@ -173,25 +171,22 @@ const aiuto = {
 };
 
 
-
 const eventi = {
   template: `
       <section>
-          <h2>Bacheca degli Incontri Culturali</h2>
+        <h2>Bacheca degli Incontri Culturali</h2>
           <p>
               Benvenuti alla bacheca eventi dell’aula studio! Qui troverai l’elenco degli incontri culturali programmati per i prossimi giorni. Tutti gli eventi sono gratuiti e aperti al pubblico, ti aspettiamo!
           </p>
-         
-          <div class="event" v-for="event in eventiOrdinati" :key="event.id">
-              <h3>{{ event.title }}</h3>
-              <p><strong>Data:</strong> {{ event.date }}</p>
-              <p><strong>Orario:</strong> {{ event.time }}</p>
-              <p><strong>Descrizione:</strong> {{ event.description }}</p>
-              <p v-if="event.speakers"><strong>Relatori:</strong> {{ event.speakers }}</p>
-              <p v-if="event.note" class="note"><em>{{ event.note }}</em></p>
-              <a v-if="event.link" :href="event.link" target="_blank">Prenotazione</a>
-              <hr />
-          </div>
+        <div class="card mb-3 shadow p-3" v-for="event in eventiOrdinati" :key="event.id">
+            <h3 class="card-title text-danger">{{ event.title }}</h3>
+            <p><strong>Data:</strong> {{ event.date }}</p>
+            <p><strong>Orario:</strong> {{ event.time }}</p>
+            <p><strong>Descrizione:</strong> {{ event.description }}</p>
+            <p v-if="event.speakers"><strong>Relatori:</strong> {{ event.speakers }}</p>
+            <p v-if="event.note"><em class="text-danger">{{ event.note }}</em></p>
+            <a v-if="event.link" :href="event.link" target="_blank" class="btn btn-outline-danger btn-sm mt-2">Prenotazione</a>
+        </div>
       </section>
   `,
   data() {
@@ -255,23 +250,23 @@ const eventi = {
 
 const panoramica = {
   template: `
-    <section class="panoramica-section">
-      <h2>Panoramica della Prenotazione</h2>
+    <section>
+      <h2>Panoramica della Prenotazione</h2><br>
       <div class="panoramica-steps">
-        <div class="step">
-          <h3>1. Accedi al tuo account o creane uno nuovo</h3>
+        <div class="step card mb-4 shadow p-3">
+          <h3 class="card-title text-danger">1. Accedi al tuo account o creane uno nuovo</h3>
           <p>Per poter effettuare una prenotazione, è necessario accedere al tuo account. Se non possiedi ancora un account, puoi facilmente crearne uno nuovo in pochi passaggi.</p>
         </div>
-        <div class="step">
-          <h3>2. Inserisci la data, l’ora e il numero di persone</h3>
+        <div class="step card mb-4 shadow p-3">
+          <h3 class="card-title text-danger">2. Inserisci la data, l’ora e il numero di persone</h3>
           <p>Specifica la data e l’ora della prenotazione, oltre al numero di persone che parteciperanno. Assicurati che le informazioni siano corrette prima di procedere.</p>
         </div>
-        <div class="step">
-          <h3>3. Premi “Prenota”</h3>
+        <div class="step card mb-4 shadow p-3">
+          <h3 class="card-title text-danger">3. Premi “Prenota”</h3>
           <p>Una volta che tutte le informazioni sono state inserite, clicca sul pulsante “Prenota” per finalizzare la tua richiesta. Riceverai una conferma della prenotazione.</p>
         </div>
-        <div class="step">
-          <h3>4. Visualizza la prenotazione</h3>
+        <div class="step card mb-4 shadow p-3">
+          <h3 class="card-title text-danger">4. Visualizza la prenotazione</h3>
           <p>Una volta effettuata la prenotazione, nella sezione "Le mie prenotazioni" potrai visualizzare i dati relativi alla tua prenotazione, ed eventualmente cancellarla.<p>
         </div>
       </div>
@@ -280,24 +275,23 @@ const panoramica = {
 };
 
 
-
 const prenota = {
   template: `
-    <section class="centered-section">
+    <section>
       <h2>Prenota</h2>            
       <p>Accedi per prenotare la tua sessione presso L'Aula Studio.</p>
 
       <!-- Form di login -->
-      <form @submit.prevent="login">
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" v-model="email" id="email" required />
-        </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" v-model="password" id="password" required />
-        </div>
-        <button type="submit">Login</button>
+      <form @submit.prevent="login" class="w-100 mx-auto" style="max-width: 400px;">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" v-model="email" id="email" required class="form-control" />
+        </div><br>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" v-model="password" id="password" required class="form-control" />
+        </div><br>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
       </form>
 
       <!-- Messaggio di errore o successo -->
@@ -316,11 +310,10 @@ const prenota = {
       password: '',
       successMessage: '',
       errorMessage: '',
-      isLoggedIn: false // Stato per sapere se l'utente è loggato
+      isLoggedIn: false 
     };
   },
   methods: {
-    // Funzione per il login
     async login() {
       try {
         const response = await fetch('http://localhost:8000/login', {
@@ -345,13 +338,12 @@ const prenota = {
           // Salva i dati di login in sessionStorage
           sessionStorage.setItem('user', JSON.stringify({
             email: this.email,
-            id: data.user_id   // 👈 questo deve arrivare dal backend
+            id: data.user_id   // questo deve arrivare dal backend
           }));
-
 
           setTimeout(() => {
             this.$router.push({ name: 'prenota2' }); 
-          }, 1000);  // Imposta un piccolo delay (1 secondo) per vedere il messaggio di successo prima del redirect
+          }, 1000);  
         } else {
           // Errore nel login
           this.errorMessage = data.error;
@@ -363,7 +355,6 @@ const prenota = {
         this.successMessage = '';
       }
     },
-
     goToRegistration() {
       this.$router.push({ name: 'registrati' });
     },
@@ -379,44 +370,59 @@ const prenota = {
 };  
 
 
-
 const registrati = {
   template: `
-      <section class="page-container">
+      <section>
           <h2>Registrazione</h2>
           <p>Compila i seguenti campi per registrarti.</p>
 
-          <form @submit.prevent="submitRegistration">
-              <input type="text" v-model="nome" placeholder="Inserisci il tuo nome" required>
-              <input type="text" v-model="cognome" placeholder="Inserisci il tuo cognome" required>
+          <form @submit.prevent="submitRegistration" class="w-100 mx-auto" style="max-width: 500px;">
+            <div class="mb-3">
+              <input type="text" v-model="nome" placeholder="Inserisci il tuo nome" required class="form-control" />
+            </div>
+            <div class="mb-3">
+              <input type="text" v-model="cognome" placeholder="Inserisci il tuo cognome" required class="form-control" />
+            </div>
+            <div class="mb-3">
               <input type="text" v-model="matricola" placeholder="Inserisci la tua matricola"
-                  pattern="\\d{10}" maxlength="10"
-                  title="La matricola deve essere composta da 10 cifre numeriche" required>
-              <select v-model="corso" required>
-                  <option disabled value="">Scegli il tuo corso</option>
-                  <option value="Architettura">Architettura</option>
-                  <option value="Ingegneria biomedica">Ingegneria biomedica</option>
-                  <option value="Ingegneria elettronica">Ingegneria elettronica</option>
-                  <option value="Ingegneria e scienze informatiche">Ingegneria e scienze informatiche</option>
-                  <option value="Scienze e cultura della gastronomia">Scienze e cultura della gastronomia</option>
-                  <option value="Scienze e tecniche psicologiche">Scienze e tecniche psicologiche</option>
-                  <option value="Tecnologie alimentari">Tecnologie alimentari</option>
-                  <option value="Tecnologie dei sistemi informatici">Tecnologie dei sistemi informatici</option>
-                  <option value="Viticoltura ed enologia">Viticoltura ed enologia</option>
+                    pattern="\\d{10}" maxlength="10"
+                    title="La matricola deve essere composta da 10 cifre numeriche" required
+                    class="form-control" />
+            </div>
+            <div class="mb-3">
+              <select v-model="corso" required class="form-select">
+                <option disabled value="">Scegli il tuo corso</option>
+                <option value="Architettura">Architettura</option>
+                <option value="Ingegneria biomedica">Ingegneria biomedica</option>
+                <option value="Ingegneria elettronica">Ingegneria elettronica</option>
+                <option value="Ingegneria e scienze informatiche">Ingegneria e scienze informatiche</option>
+                <option value="Scienze e cultura della gastronomia">Scienze e cultura della gastronomia</option>
+                <option value="Scienze e tecniche psicologiche">Scienze e tecniche psicologiche</option>
+                <option value="Tecnologie alimentari">Tecnologie alimentari</option>
+                <option value="Tecnologie dei sistemi informatici">Tecnologie dei sistemi informatici</option>
+                <option value="Viticoltura ed enologia">Viticoltura ed enologia</option>
               </select>
-              <select v-model="anno" required>
-                  <option disabled value="">Scegli l'anno</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="Fuoricorso">Fuoricorso</option>
+            </div>
+            <div class="mb-3">
+              <select v-model="anno" required class="form-select">
+                <option disabled value="">Scegli l'anno</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="Fuoricorso">Fuoricorso</option>
               </select>
-              <input type="email" v-model="regEmail" placeholder="Inserisci la tua email" required>
-              <input type="password" v-model="regPassword" placeholder="Inserisci la tua password" required>
-              <button type="submit">Registrati</button>
+            </div>
+            <div class="mb-3">
+              <input type="email" v-model="regEmail" placeholder="Inserisci la tua email" required class="form-control" />
+            </div>
+            <div class="mb-3">
+              <input type="password" v-model="regPassword" placeholder="Inserisci la tua password" required class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrati</button>
           </form>
+
 
           <div v-if="regError" class="error-message">
               {{ regError }}
@@ -471,7 +477,7 @@ const registrati = {
                   this.successMessage = data.message;
                   setTimeout(() => {
                       this.successMessage = null;
-                      this.$router.push({ name: 'prenota' }); // Vai alla pagina di login
+                      this.$router.push({ name: 'prenota' }); 
                   }, 3000);
               } else if (data.error) {
                   this.regError = data.error;
@@ -493,24 +499,32 @@ const prenota2 = {
   template: `
   <section>
     <h2>Effettua una Prenotazione</h2>
-    <form v-if="!isBookingConfirmed" @submit.prevent="checkAvailability">
-      <label for="data">Data:</label>
-      <input type="date" v-model="data" id="data" required />
+    <form v-if="!isBookingConfirmed" @submit.prevent="checkAvailability" class="w-100 mx-auto" style="max-width: 500px;">
+      <div class="mb-3">
+        <label for="data" class="form-label">Data:</label>
+        <input type="date" v-model="data" id="data" required class="form-control" />
+      </div>
 
-      <label for="slot">Ora di inizio:</label>
-      <select v-model.number="slot" id="slot" required>
-        <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
-      </select>
+      <div class="mb-3">
+        <label for="slot" class="form-label">Ora di inizio:</label>
+        <select v-model.number="slot" id="slot" required class="form-select">
+          <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
+        </select>
+      </div>
 
-      <label for="durata">Durata (ore):</label>
-      <select v-model.number="durata" id="durata" required>
-        <option v-for="n in durataMassima" :key="n" :value="n">{{ n }}</option>
-      </select>
+      <div class="mb-3">
+        <label for="durata" class="form-label">Durata (ore):</label>
+        <select v-model.number="durata" id="durata" required class="form-select">
+          <option v-for="n in durataMassima" :key="n" :value="n">{{ n }}</option>
+        </select>
+      </div>
 
-      <label for="posti">Numero di posti:</label>
-      <input type="number" v-model.number="posti" id="posti" min="1" max="4" required />
+      <div class="mb-3">
+        <label for="posti" class="form-label">Numero di posti:</label>
+        <input type="number" v-model.number="posti" id="posti" min="1" max="4" required class="form-control" />
+      </div>
 
-      <button type="submit">Verifica Disponibilità</button>
+      <button type="submit" class="btn btn-primary w-100">Verifica Disponibilità</button>
     </form>
 
     <div v-if="availabilityMessage && !isBookingConfirmed" :class="{ success: isAvailable, error: !isAvailable }">
@@ -533,8 +547,8 @@ const prenota2 = {
       <p>Non hai ancora prenotazioni.</p>
     </div>
 
-    <table v-if="!isLoading && prenotazioni.length > 0" class="prenotazioni-table">
-      <thead>
+    <table v-if="!isLoading && prenotazioni.length > 0" class="table table-striped table-hover table-bordered">
+      <thead class="table-danger">
         <tr>
           <th>Data</th>
           <th>Ora di Inizio</th>
@@ -550,8 +564,8 @@ const prenota2 = {
           <td>{{ convertiSlot(booking.ora_fine) }}</td>
           <td>{{ booking.numero_persone }}</td>
           <td>
-            <button @click="openModal(booking)">Modifica</button>
-            <button @click="deleteReservation(booking.id)">Cancella</button>
+            <button class="btn btn-sm btn-primary me-1" @click="openModal(booking)">Modifica</button>
+            <button class="btn btn-sm btn-danger" @click="deleteReservation(booking.id)">Cancella</button>
           </td>
         </tr>
       </tbody>
@@ -561,29 +575,35 @@ const prenota2 = {
       <p>Caricamento delle prenotazioni...</p>
     </div>
 
-    <!-- MODALE PER MODIFICA -->
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal-content">
-        <h3>Modifica prenotazione</h3>
+    <div v-if="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifica prenotazione</h5>
+            <button type="button" class="btn-close" @click="chiudiModale"></button>
+          </div>
+          <div class="modal-body">
+            <label>Data:</label>
+            <input type="date" class="form-control mb-2" v-model="prenotazioneSelezionata.data" />
 
-        <label>Data:</label>
-        <input type="date" v-model="prenotazioneSelezionata.data" />
+            <label>Ora inizio:</label>
+            <select class="form-select mb-2" v-model.number="prenotazioneSelezionata.ora_inizio">
+              <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
+            </select>
 
-        <label>Ora inizio:</label>
-        <select v-model.number="prenotazioneSelezionata.ora_inizio">
-          <option v-for="orario in orari" :value="orario.slot">{{ orario.label }}</option>
-        </select>
+            <label>Durata (ore):</label>
+            <select class="form-select mb-2" v-model.number="prenotazioneSelezionata.durata">
+              <option v-for="n in (prenotazioneSelezionata.ora_inizio === 12 ? [1] : [1,2])" :key="n" :value="n">{{ n }}</option>
+            </select>
 
-        <label>Durata (ore):</label>
-        <select v-model.number="prenotazioneSelezionata.durata">
-          <option v-for="n in (prenotazioneSelezionata.ora_inizio === 12 ? [1] : [1,2])" :key="n" :value="n">{{ n }}</option>
-        </select>
-
-        <label>Numero persone:</label>
-        <input type="number" v-model.number="prenotazioneSelezionata.numero_persone" min="1" max="4" />
-
-        <button @click="salvaModifica">Salva</button>
-        <button @click="chiudiModale">Annulla</button>
+            <label>Numero persone:</label>
+            <input type="number" class="form-control mb-2" v-model.number="prenotazioneSelezionata.numero_persone" min="1" max="4" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" @click="salvaModifica">Salva</button>
+            <button type="button" class="btn btn-danger" @click="chiudiModale">Annulla</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -753,60 +773,60 @@ const prenota2 = {
 
 const regolamento = {
   template: `
-      <section class="page-container">
+      <section>
           <h2>Regolamento dell’Aula Studio</h2>
           <p>
               Benvenuto! Per garantire un ambiente sereno e organizzato, tutti gli utenti dell’aula studio sono tenuti a rispettare le regole riportate in questa pagina.
               La mancata osservanza potrebbe comportare sanzioni, incluso il divieto di accesso.
           </p>
-          <ol class="regolamento-list">
-              <li>
-                  <strong>Accesso all'Aula Studio</strong><br>
-                  L'accesso è consentito solo agli utenti registrati e in possesso di una prenotazione valida.<br>
-                  Gli orari di apertura sono: 08:00 - 20:00, tutti i giorni, salvo comunicazioni straordinarie.
+          <ol class="w-100 mx-auto" style="max-width: 800px; padding-left: 0; list-style-type: decimal;">
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Accesso all'Aula Studio</strong><br>
+                  - L'accesso è consentito solo agli utenti registrati e in possesso di una prenotazione valida.<br>
+                  - Gli orari di apertura sono: 08:00 - 20:00, tutti i giorni, salvo comunicazioni straordinarie.
               </li>
-              <li>
-                  <strong>Prenotazioni</strong><br>
-                  Ogni sessione può essere della durata di 1 o 2 ore.<br>
-                  Le prenotazioni devono essere effettuate online tramite il nostro portale sul sito ufficiale.<br>
-                  La cancellazione della prenotazione è possibile fino a 10 minuti prima dell'orario di inizio.
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Prenotazioni</strong><br>
+                  - Ogni sessione può essere della durata di 1 o 2 ore.<br>
+                  - Le prenotazioni devono essere effettuate online tramite il nostro portale sul sito ufficiale.<br>
+                  - La cancellazione della prenotazione è possibile fino a 10 minuti prima dell'orario di inizio.
               </li>
-              <li>
-                  <strong>Comportamento in Aula</strong><br>
-                  È richiesto il massimo silenzio per garantire un ambiente di studio ideale.<br>
-                  Sono vietati comportamenti rumorosi come telefonate, discussioni o utilizzo di dispositivi senza cuffie.<br>
-                  Dispositivi elettronici come laptop, tablet e smartphone devono essere usati in modalità silenziosa.<br>
-                  È vietato consumare pasti all’interno dell’aula. Sono consentiti snack leggeri e bevande in bottiglie o termos chiusi.<br>
-                  Ogni utente è responsabile dei propri oggetti personali. L’aula studio non si assume responsabilità per eventuali smarrimenti o furti.
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Comportamento in Aula</strong><br>
+                  - È richiesto il massimo silenzio per garantire un ambiente di studio ideale.<br>
+                  - Sono vietati comportamenti rumorosi come telefonate, discussioni o utilizzo di dispositivi senza cuffie.<br>
+                  - Dispositivi elettronici come laptop, tablet e smartphone devono essere usati in modalità silenziosa.<br>
+                  - È vietato consumare pasti all’interno dell’aula. Sono consentiti snack leggeri e bevande in bottiglie o termos chiusi.<br>
+                  - Ogni utente è responsabile dei propri oggetti personali. L’aula studio non si assume responsabilità per eventuali smarrimenti o furti.
               </li>
-              <li>
-                  <strong>Pulizia e Cura degli Spazi</strong><br>
-                  Lascia il posto pulito e in ordine al termine della tua sessione.<br>
-                  Utilizza i cestini per gettare rifiuti.<br>
-                  È vietato spostare sedie o tavoli senza autorizzazione.
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Pulizia e Cura degli Spazi</strong><br>
+                  - Lascia il posto pulito e in ordine al termine della tua sessione.<br>
+                  - Utilizza i cestini per gettare rifiuti.<br>
+                  - È vietato spostare sedie o tavoli senza autorizzazione.
               </li>
-              <li>
-                  <strong>Postazioni e Regole di Occupazione</strong><br>
-                  Ogni postazione può essere occupata da un solo utente, non è possibile spostare le sedie di postazione.<br>
-                  Non è possibile eccedere il numero di postazioni occupate senza aver prima modificato la prenotazione.<br>
-                  Il tempo di permanenza consentito alla postazione termina alla fine della sessione prenotata.
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Postazioni e Regole di Occupazione</strong><br>
+                  - Ogni postazione può essere occupata da un solo utente, non è possibile spostare le sedie di postazione.<br>
+                  - Non è possibile eccedere il numero di postazioni occupate senza aver prima modificato la prenotazione.<br>
+                  - Il tempo di permanenza consentito alla postazione termina alla fine della sessione prenotata.
               </li>
-              <li>
-                  <strong>Sicurezza e Emergenze</strong><br>
-                  Segui sempre le indicazioni del personale in caso di emergenza o evacuazione.<br>
-                  È vietato accedere a zone riservate o non autorizzate.<br>
-                  Ogni comportamento pericoloso o che violi le norme di sicurezza sarà sanzionato.
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Sicurezza e Emergenze</strong><br>
+                  - Segui sempre le indicazioni del personale in caso di emergenza o evacuazione.<br>
+                  - È vietato accedere a zone riservate o non autorizzate.<br>
+                  - Ogni comportamento pericoloso o che violi le norme di sicurezza sarà sanzionato.
               </li>
-              <li>
-                  <strong>Sanzioni e Penalità</strong><br>
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Sanzioni e Penalità</strong><br>
                   Il mancato rispetto delle regole può comportare:<br>
                   - Avvisi o richiami formali.<br>
                   - Sospensione temporanea dell’accesso all’aula studio.<br>
                   - Esclusione permanente nei casi più gravi.<br>
                   Le penalità verranno notificate via email con i dettagli della violazione.
               </li>
-              <li>
-                  <strong>Contatti per Segnalazioni</strong><br>
+              <li class="mb-4">
+                  <strong class="text-danger" style="font-size: 1.4rem;">Contatti per Segnalazioni</strong><br>
                   Se noti comportamenti inappropriati o hai bisogno di assistenza:<br>
                   Email: <a href="mailto:info@laulastudio.com">support@laulastudio.com</a><br>
                   Telefono: <a href="tel:+1234567890">+39 123 456 7890</a>
@@ -819,7 +839,7 @@ const regolamento = {
       return {};
   },
   methods: {
-      // Eventuali metodi futuri per interazioni con questa vista
+      
   },
 };
 
