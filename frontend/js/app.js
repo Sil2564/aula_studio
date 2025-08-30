@@ -318,43 +318,54 @@ const prenota = {
       try {
         const response = await fetch('http://localhost:8000/login', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: this.email, password: this.password }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
           // Login riuscito
-          this.successMessage = data.message;
-          this.errorMessage = '';
-          this.isLoggedIn = true; // Utente loggato, cambia stato
-         
-          // Salva i dati di login in sessionStorage
+          this.isLoggedIn = true;
+
+          // Salva i dati in sessionStorage
           sessionStorage.setItem('user', JSON.stringify({
             email: this.email,
-            id: data.user_id   // questo deve arrivare dal backend
+            id: data.user_id
           }));
 
+          // SweetAlert al posto dei div
+          Swal.fire({
+            icon: 'success',
+            title: 'Accesso effettuato!',
+            text: 'Utente loggato con successo',
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+          // Reindirizza dopo 1,5 secondi
           setTimeout(() => {
             this.$router.push({ name: 'prenota2' }); 
-          }, 1000);  
+          }, 1500);
+
         } else {
-          // Errore nel login
-          this.errorMessage = data.error;
-          this.successMessage = '';
+          // Errore login
+          Swal.fire({
+            icon: 'error',
+            title: 'Errore!',
+            text: data.error
+          });
         }
       } catch (error) {
         console.error('Errore nella richiesta di login:', error);
-        this.errorMessage = 'Errore nel tentativo di login.';
-        this.successMessage = '';
+        Swal.fire({
+          icon: 'error',
+          title: 'Errore!',
+          text: 'Errore nel tentativo di login.'
+        });
       }
     },
+
     goToRegistration() {
       this.$router.push({ name: 'registrati' });
     },
@@ -452,46 +463,63 @@ const registrati = {
       };
   },
   methods: {
-      submitRegistration() {
-          const formData = {
-              nome: this.nome,
-              cognome: this.cognome,
-              matricola: this.matricola,
-              corso: this.corso,
-              anno: this.anno,
-              email: this.regEmail,
-              password: this.regPassword
-          };
- 
-          fetch('http://localhost:8000/register', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formData),
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  this.regError = null;
-                  this.successMessage = data.message;
-                  setTimeout(() => {
-                      this.successMessage = null;
-                      this.$router.push({ name: 'prenota' }); 
-                  }, 3000);
-              } else if (data.error) {
-                  this.regError = data.error;
-              }
-          })
-          .catch(err => {
-              console.error('Errore durante la registrazione:', err);
-              this.regError = 'Si è verificato un errore. Riprova.';
+    submitRegistration() {
+      const formData = {
+        nome: this.nome,
+        cognome: this.cognome,
+        matricola: this.matricola,
+        corso: this.corso,
+        anno: this.anno,
+        email: this.regEmail,
+        password: this.regPassword
+      };
+
+      fetch('http://localhost:8000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Utente registrato con successo
+          Swal.fire({
+            icon: 'success',
+            title: 'Registrazione completata!',
+            text: 'Utente registrato con successo',
+            timer: 1500,
+            showConfirmButton: false
           });
-      },
-      goToLogin() {
-          this.$router.push({ name: 'prenota' });
-      },
+
+          // Reindirizza dopo 1,5 secondi
+          setTimeout(() => {
+            this.$router.push({ name: 'prenota' });
+          }, 1500);
+
+        } else if (data.error) {
+          // Mostra errore con SweetAlert
+          Swal.fire({
+            icon: 'error',
+            title: 'Errore!',
+            text: data.error
+          });
+        }
+      })
+      .catch(err => {
+        console.error('Errore durante la registrazione:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Errore!',
+          text: 'Si è verificato un errore. Riprova.'
+        });
+      });
+    },
+
+    goToLogin() {
+      this.$router.push({ name: 'prenota' });
+    },
   },
+
 }    
 
 
@@ -527,24 +555,12 @@ const prenota2 = {
       <button type="submit" class="btn btn-primary w-100">Verifica Disponibilità</button>
     </form>
 
-    <div v-if="availabilityMessage && !isBookingConfirmed" 
-        :class="['alert', isAvailable ? 'alert-success' : 'alert-danger', 'mt-3']">
-      {{ availabilityMessage }}
-    </div>
-
-    <div v-if="isAvailable && !isBookingConfirmed" class="mt-3">
-      <button @click="showConfirmation" class="btn btn-success w-100">Conferma Prenotazione</button>
-      <p v-if="bookingMessage" class="alert alert-success mt-2">{{ bookingMessage }}</p>
-    </div>
 
     <div v-if="isBookingConfirmed" class="mt-3 text-center">
-      <p class="alert alert-success">La tua prenotazione è stata confermata!</p>
       <a href="#" @click.prevent="reloadPage" class="btn btn-link">Prenota un'altra sessione</a>
     </div>
 
-
     <br><br>
-
     <h3>Le mie prenotazioni</h3><br>
 
     <div v-if="!isLoading && prenotazioni.length === 0">
@@ -611,6 +627,7 @@ const prenota2 = {
       </div>
     </div>
   </section>
+
   `,
   data() {
     return {
@@ -660,18 +677,49 @@ const prenota2 = {
       });
 
       const result = await response.json();
+
       if (result.success) {
         this.isAvailable = true;
-        this.availabilityMessage = 'Posti disponibili!';
+
+        // SweetAlert con conferma diretta
+        Swal.fire({
+          icon: 'success',
+          title: 'Posti disponibili!',
+          text: 'Vuoi confermare la tua prenotazione?',
+          showCancelButton: true,
+          confirmButtonText: 'Conferma Prenotazione',
+          cancelButtonText: 'Annulla',
+          preConfirm: async () => {
+            // chiama conferma prenotazione
+            await this.confirmBooking();
+          }
+        });
+
       } else {
         this.isAvailable = false;
-        this.availabilityMessage = result.error;
+        Swal.fire({
+          icon: 'error',
+          title: 'Posti non disponibili',
+          text: result.error,
+          confirmButtonText: 'Ok'
+        });
       }
     },
 
+
     async showConfirmation() {
       await this.confirmBooking();
+      
+      if (this.isBookingConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Prenotazione Confermata!',
+          text: 'La tua prenotazione è stata registrata correttamente.',
+          confirmButtonText: 'Perfetto!'
+        });
+      }
     },
+
 
     async confirmBooking() {
       const userId = JSON.parse(sessionStorage.getItem('user'))?.id || 1;
@@ -691,22 +739,52 @@ const prenota2 = {
       });
 
       const result = await response.json();
+
       if (result.success) {
         this.isBookingConfirmed = true;
         this.prenotazioni.push(result.booking);
-        this.bookingMessage = result.message;
+
+        // SweetAlert invece di <p> nel template
+        Swal.fire({
+          icon: 'success',
+          title: 'Prenotazione Confermata!',
+          text: 'La tua prenotazione è stata registrata correttamente.',
+          confirmButtonText: 'Perfetto!'
+        });
       } else {
-        this.bookingMessage = result.error || "Errore durante la prenotazione.";
+        Swal.fire({
+          icon: 'error',
+          title: 'Errore',
+          text: result.error || "Errore durante la prenotazione.",
+          confirmButtonText: 'Ok'
+        });
       }
     },
 
+
     async deleteReservation(id) {
-      if (!window.confirm('Sei sicuro di voler eliminare questa prenotazione?')) return;
+      const result = await Swal.fire({
+        title: 'Sei sicuro?',
+        text: "Vuoi davvero cancellare questa prenotazione?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sì, cancella!',
+        cancelButtonText: 'No'
+      });
+
+      if (!result.isConfirmed) return;
+
       const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, { method: 'DELETE' });
       const json = await res.json();
-      if (json.success) this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
-      else alert('Errore: ' + (json.error || 'impossibile cancellare'));
+
+      if (json.success) {
+        this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
+        Swal.fire('Cancellata!', 'La prenotazione è stata eliminata.', 'success');
+      } else {
+        Swal.fire('Errore', json.error || 'Impossibile cancellare', 'error');
+      }
     },
+
 
     openModal(booking) {
       this.prenotazioneSelezionata = { ...booking };
@@ -732,13 +810,14 @@ const prenota2 = {
       });
 
       const json = await res.json();
-      if (json.success) {
-        const idx = this.prenotazioni.findIndex(p => p.id === b.id);
-        if (idx !== -1) this.prenotazioni[idx] = json.booking;
-        this.chiudiModale();
-      } else {
-        alert('Errore: ' + (json.error || 'impossibile modificare'));
-      }
+        if (json.success) {
+          const idx = this.prenotazioni.findIndex(p => p.id === b.id);
+          if (idx !== -1) this.prenotazioni[idx] = json.booking;
+          this.chiudiModale();
+          Swal.fire('Salvato!', 'La prenotazione è stata aggiornata.', 'success');
+        } else {
+          Swal.fire('Errore', json.error || 'Impossibile modificare', 'error');
+        }
     },
 
     reloadPage() {
