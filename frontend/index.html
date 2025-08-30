@@ -14,21 +14,8 @@
 <body>
     <div id="app">
         
-        <header class="bg-danger text-white text-center py-4">
-            <h1 class="fs-2 m-0">AULA STUDIO</h1>
-            <nav class="mt-3">
-                <ul class="nav justify-content-center gap-4">
-                    <li class="nav-item">
-                    <router-link to="/" class="nav-link text-white text-decoration-none">Home</router-link>
-                    </li>
-                    <li class="nav-item">
-                    <router-link to="/contatti" class="nav-link text-white text-decoration-none">Contatti</router-link>
-                    </li>
-                    <li class="nav-item">
-                    <router-link to="/aiuto" class="nav-link text-white text-decoration-none">Aiuto</router-link>
-                    </li>
-                </ul>
-            </nav>
+        <header class="bg-danger text-white text-center py-5">
+            <router-link to="/" class="nav-link text-white text-decoration-none"><h1 class="fs-2 m-0">AULA STUDIO UNIBO</h1></router-link>
         </header>
 
         <aside class="position-fixed top-50 end-0 translate-middle-y me-3">
@@ -44,6 +31,9 @@
                 </li>
                 <li>
                     <router-link to="/regolamento" class="btn btn-danger fw-bold fs-5 shadow w-100 text-center py-3 rounded-3">Regolamento</router-link>
+                </li>
+                <li>
+                    <router-link to="/aiuto" class="btn btn-danger fw-bold fs-5 shadow w-100 text-center py-3 rounded-3">Aiuto</router-link>
                 </li>
             </ul>
         </aside>

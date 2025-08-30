@@ -1,7 +1,7 @@
 const Home = {
   template: `
   <section>
-      <h2>Benvenuto nell'Aula Studio!</h2>
+      <h2>Benvenuto nell'Aula Studio!</h2><br>
       <div class="page-container">
           <div class="home-section card mb-4 shadow p-3">
               <h3 class="card-title text-danger">Un Ambiente Perfetto per il Tuo Studio</h3>
