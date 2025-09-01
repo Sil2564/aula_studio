@@ -177,6 +177,37 @@ app.get('/my-reservations/:user_id', (req: Request, res: Response) => {
   }
 });
 
+// ------------------- NUOVA ROTTA CALENDARIO -------------------
+app.get('/my-calendar/:user_id', (req: Request, res: Response) => {
+  const user_id = parseInt(req.params.user_id);
+
+  try {
+    const stmt = db.prepare(`
+      SELECT * FROM prenotazioni
+      WHERE user_id = ?
+      ORDER BY data, ora_inizio
+    `);
+    const rows: Prenotazione[] = stmt.all(user_id);
+
+    // Converte le prenotazioni in eventi per FullCalendar
+    const events = rows.map(r => {
+      const startHour = String(r.ora_inizio).padStart(2, '0') + ":00";
+      const endHour = String(r.ora_fine).padStart(2, '0') + ":00";
+
+      return {
+        title: `Prenotazione (${r.numero_persone} pers.)`,
+        start: `${r.data}T${startHour}`,
+        end: `${r.data}T${endHour}`
+      };
+    });
+
+    res.json(events);
+  } catch (err: any) {
+    console.error('Errore recupero calendario:', err.message);
+    res.status(500).json({ error: 'Errore nel recupero del calendario.' });
+  }
+});
+
 // Cancellazione prenotazione
 app.delete('/prenotazioni/:id', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);

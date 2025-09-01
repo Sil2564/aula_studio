@@ -591,9 +591,12 @@ const prenota2 = {
       </tbody>
     </table>
 
+    <div id="calendar" style="margin-top:20px;"></div>
+
     <div v-if="isLoading">
       <p>Caricamento delle prenotazioni...</p>
     </div>
+
 
     <div v-if="showModal" class="modal fade show d-block" tabindex="-1" role="dialog">
       <div class="modal-dialog">
@@ -834,23 +837,46 @@ const prenota2 = {
   },
 
   mounted() {
-    const userId = JSON.parse(sessionStorage.getItem('user'))?.id;
-    if (!userId) return console.error("ID utente non trovato nella sessione.");
+  const userId = JSON.parse(sessionStorage.getItem('user'))?.id;
+  if (!userId) return console.error("ID utente non trovato nella sessione.");
 
-    this.isLoading = true;
-    fetch(`http://localhost:8000/my-reservations/${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        this.isLoading = false;
-        if (data.success) this.prenotazioni = data.prenotazioni;
-        else this.prenotazioni = [];
-      })
-      .catch(err => {
-        this.isLoading = false;
-        console.error('Errore caricamento:', err);
+  this.isLoading = true;
+  fetch(`http://localhost:8000/my-reservations/${userId}`)
+    .then(res => res.json())
+    .then(data => {
+      this.isLoading = false;
+      if (data.success) {
+        this.prenotazioni = data.prenotazioni;
+
+        // ⬇️ Inizializza il calendario SOLO dopo aver caricato le prenotazioni
+        this.$nextTick(() => {
+          const calendarEl = document.getElementById('calendar');
+          if (calendarEl) {
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'dayGridMonth',
+              locale: 'it',
+              events: this.prenotazioni.map(p => ({
+                id: p.id,
+                title: `Posti: ${p.numero_persone}`,
+                start: `${p.data}T${this.convertiSlot(p.ora_inizio)}`,
+                end: `${p.data}T${this.convertiSlot(p.ora_fine)}`
+              }))
+            });
+            calendar.render();
+          }
+        });
+
+      } else {
         this.prenotazioni = [];
-      });
-  }
+      }
+    })
+    .catch(err => {
+      this.isLoading = false;
+      console.error('Errore caricamento:', err);
+      this.prenotazioni = [];
+    });
+}
+
 };
 
 
