@@ -298,10 +298,11 @@ const prenota = {
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
       <div v-if="successMessage" class="success">{{ successMessage }}</div>
 
-      <div v-if="!isLoggedIn">
+      <br>
+      <center><div v-if="!isLoggedIn">
         Non hai un account?
         <a @click.prevent="goToRegistration">Registrati qui</a>
-      </div>
+      </div></center>
     </section>
   `,
   data() {
@@ -450,9 +451,10 @@ const registrati = {
               {{ successMessage }}
           </div>
 
-          <div>
+          <br>
+          <center><div>
               Hai già un account? <a @click.prevent="goToLogin">Accedi qui</a>
-          </div>
+          </div></center>
       </section>
   `,
 
