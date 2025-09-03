@@ -429,7 +429,14 @@ const registrati = {
               <input type="email" v-model="regEmail" placeholder="Inserisci la tua email" required class="form-control" />
             </div>
             <div class="mb-3">
-              <input type="password" v-model="regPassword" placeholder="Inserisci la tua password" required class="form-control" />
+              <input type="password" 
+                  v-model="regPassword" 
+                  placeholder="Inserisci la tua password"
+                  required 
+                  minlength="8"
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*"
+                  title="Minimo 8 caratteri, almeno 1 maiuscola, 1 minuscola, 1 numero e 1 simbolo"
+                  class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary w-100">Registrati</button>
           </form>
