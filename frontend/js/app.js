@@ -660,9 +660,9 @@ const prenota2 = {
   },
   methods: {
     convertiSlot(slot) {
-      const ora = 8 + (parseInt(slot) - 1);
-      return `${ora.toString().padStart(2, '0')}:00`;
-    },
+  const ora = 8 + (parseInt(slot) - 1);
+  return `${ora.toString().padStart(2, '0')}:00`;
+},
 
     async checkAvailability() {
       const slotInizio = parseInt(this.slot);
@@ -747,6 +747,25 @@ const prenota2 = {
         this.isBookingConfirmed = true;
         this.prenotazioni.push(result.booking);
 
+          if (this.calendar) {
+    const oraInizio = this.convertiSlot(result.booking.ora_inizio);
+    const oraFine = this.convertiSlot(result.booking.ora_fine);
+
+    this.calendar.addEvent({
+      id: result.booking.id,
+      title: `${oraInizio}-${oraFine}`,
+      start: `${result.booking.data}T${oraInizio}`,
+      end: `${result.booking.data}T${oraFine}`,
+      extendedProps: {
+        data: result.booking.data,
+        ora_inizio: oraInizio,
+        ora_fine: oraFine,
+        numero_persone: result.booking.numero_persone
+      }
+    });
+  }
+
+
         // SweetAlert invece di <p> nel template
         Swal.fire({
           icon: 'success',
@@ -766,27 +785,33 @@ const prenota2 = {
 
 
     async deleteReservation(id) {
-      const result = await Swal.fire({
-        title: 'Sei sicuro?',
-        text: "Vuoi davvero cancellare questa prenotazione?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sì, cancella!',
-        cancelButtonText: 'No'
-      });
+  const result = await Swal.fire({
+    title: 'Sei sicuro?',
+    text: "Vuoi davvero cancellare questa prenotazione?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sì, cancella!',
+    cancelButtonText: 'No'
+  });
 
-      if (!result.isConfirmed) return;
+  if (!result.isConfirmed) return;
 
-      const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, { method: 'DELETE' });
-      const json = await res.json();
+  const res = await fetch(`http://localhost:8000/prenotazioni/${id}`, { method: 'DELETE' });
+  const json = await res.json();
 
-      if (json.success) {
-        this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
-        Swal.fire('Cancellata!', 'La prenotazione è stata eliminata.', 'success');
-      } else {
-        Swal.fire('Errore', json.error || 'Impossibile cancellare', 'error');
-      }
-    },
+  if (json.success) {
+    // 🔽 invece di modificare solo l'array in memoria...
+    // this.prenotazioni = this.prenotazioni.filter(b => b.id !== id);
+
+    // 🔽 richiami direttamente il backend per ricaricare TUTTE le prenotazioni aggiornate
+    await this.fetchPrenotazioni();
+
+    Swal.fire('Cancellata!', 'La prenotazione è stata eliminata.', 'success');
+  } else {
+    Swal.fire('Errore', json.error || 'Impossibile cancellare', 'error');
+  }
+},
+
 
 
     openModal(booking) {
@@ -836,7 +861,7 @@ const prenota2 = {
     }
   },
 
-  mounted() {
+mounted() {
   const userId = JSON.parse(sessionStorage.getItem('user'))?.id;
   if (!userId) return console.error("ID utente non trovato nella sessione.");
 
@@ -848,20 +873,48 @@ const prenota2 = {
       if (data.success) {
         this.prenotazioni = data.prenotazioni;
 
-        // ⬇️ Inizializza il calendario SOLO dopo aver caricato le prenotazioni
+        // ⬇ Inizializza il calendario SOLO dopo aver caricato le prenotazioni
         this.$nextTick(() => {
           const calendarEl = document.getElementById('calendar');
           if (calendarEl) {
             const calendar = new FullCalendar.Calendar(calendarEl, {
               initialView: 'dayGridMonth',
               locale: 'it',
-              events: this.prenotazioni.map(p => ({
-                id: p.id,
-                title: `Posti: ${p.numero_persone}`,
-                start: `${p.data}T${this.convertiSlot(p.ora_inizio)}`,
-                end: `${p.data}T${this.convertiSlot(p.ora_fine)}`
-              }))
+              displayEventTime: false,
+              events: this.prenotazioni.map(p => {
+  const oraInizio = this.convertiSlot(p.ora_inizio);
+  const oraFine = this.convertiSlot(p.ora_fine);
+  return {
+    id: p.id,
+    title: `${oraInizio}-${oraFine}`,   // SOLO orario
+    start: `${p.data}T${oraInizio}`,
+    end: `${p.data}T${oraFine}`,
+    extendedProps: {
+      data: p.data,
+      ora_inizio: oraInizio,
+      ora_fine: oraFine,
+      numero_persone: p.numero_persone
+    }
+  };
+})
+,
+
+              eventClick: (info) => {
+                const dati = info.event.extendedProps;
+                Swal.fire({
+                  title: "Dettagli prenotazione",
+                  html: `
+                    <b>Data:</b> ${dati.data}<br>
+                    <b>Ora di Inizio:</b> ${dati.ora_inizio}<br>
+                    <b>Ora di Fine:</b> ${dati.ora_fine}<br>
+                    <b>Numero di Posti:</b> ${dati.numero_persone}
+                  `,
+                  icon: "info",
+                  confirmButtonText: "Chiudi"
+                });
+              }
             });
+
             calendar.render();
           }
         });
