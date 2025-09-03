@@ -4,7 +4,6 @@ import path from 'path';
 // @ts-ignore
 import Database from 'better-sqlite3';
 
-// Tipi principali
 interface User {
   id?: number;
   nome: string;
@@ -30,7 +29,6 @@ interface Occupazione {
   totale: number;
 }
 
-// Apriamo il database esistente con better-sqlite3
 const dbPath = path.join(__dirname, 'data', 'users.db');
 const db = new Database(dbPath, { verbose: console.log });
 console.log('Connesso al database SQLite con better-sqlite3.');
@@ -39,19 +37,15 @@ const app = express();
 const port = 8000;
 
 app.use(cors());
-app.use(express.json()); // sostituisce body-parser
+app.use(express.json()); 
 
-// Servire i file statici del frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// ------------------- ROTTE -------------------
 
-// Rotta per la home
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
-// Registrazione utente
 app.post('/register', (req: Request, res: Response) => {
   const { nome, cognome, matricola, corso, anno, email, password }: User = req.body;
 
@@ -74,7 +68,7 @@ app.post('/register', (req: Request, res: Response) => {
   }
 });
 
-// Login utente
+
 app.post('/login', (req: Request, res: Response) => {
   const { email, password }: Pick<User, 'email' | 'password'> = req.body;
 
@@ -93,7 +87,7 @@ app.post('/login', (req: Request, res: Response) => {
   }
 });
 
-// Controllo disponibilità prenotazioni
+
 app.post('/check-availability', (req: Request, res: Response) => {
   const { data, ora_inizio, ora_fine, numero_persone } = req.body;
 
@@ -135,7 +129,7 @@ app.post('/check-availability', (req: Request, res: Response) => {
   }
 });
 
-// Inserimento prenotazione
+
 app.post('/make-reservation', (req: Request, res: Response) => {
   const { user_id, data, ora_inizio, ora_fine, numero_persone }: Prenotazione = req.body;
 
@@ -159,7 +153,7 @@ app.post('/make-reservation', (req: Request, res: Response) => {
   }
 });
 
-// Recupero prenotazioni dell'utente
+
 app.get('/my-reservations/:user_id', (req: Request, res: Response) => {
   const user_id = parseInt(req.params.user_id);
 
@@ -177,7 +171,6 @@ app.get('/my-reservations/:user_id', (req: Request, res: Response) => {
   }
 });
 
-// ------------------- NUOVA ROTTA CALENDARIO -------------------
 app.get('/my-calendar/:user_id', (req: Request, res: Response) => {
   const user_id = parseInt(req.params.user_id);
 
@@ -189,7 +182,6 @@ app.get('/my-calendar/:user_id', (req: Request, res: Response) => {
     `);
     const rows: Prenotazione[] = stmt.all(user_id);
 
-    // Converte le prenotazioni in eventi per FullCalendar
     const events = rows.map(r => {
       const startHour = String(r.ora_inizio).padStart(2, '0') + ":00";
       const endHour = String(r.ora_fine).padStart(2, '0') + ":00";
@@ -208,7 +200,7 @@ app.get('/my-calendar/:user_id', (req: Request, res: Response) => {
   }
 });
 
-// Cancellazione prenotazione
+
 app.delete('/prenotazioni/:id', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
 
@@ -226,13 +218,13 @@ app.delete('/prenotazioni/:id', (req: Request, res: Response) => {
   }
 });
 
-// ------------------- MODIFICA PRENOTAZIONE -------------------
+
 app.put('/prenotazioni/:id', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const { data, ora_inizio, ora_fine, numero_persone }: Prenotazione = req.body;
 
   try {
-    // Verifica che la prenotazione esista
+    
     const checkStmt = db.prepare(`SELECT * FROM prenotazioni WHERE id = ?`);
     const existing = checkStmt.get(id);
 
@@ -240,7 +232,7 @@ app.put('/prenotazioni/:id', (req: Request, res: Response) => {
       return res.status(404).json({ success: false, error: 'Prenotazione non trovata.' });
     }
 
-    // Aggiorna la prenotazione
+    
     const updateStmt = db.prepare(`
       UPDATE prenotazioni
       SET data = ?, ora_inizio = ?, ora_fine = ?, numero_persone = ?
@@ -261,7 +253,7 @@ app.put('/prenotazioni/:id', (req: Request, res: Response) => {
   }
 });
 
-// ------------------- AVVIO SERVER -------------------
+
 app.listen(port, () => {
   console.log(`Server avviato su http://localhost:${port}`);
 });

@@ -247,7 +247,6 @@ const eventi = {
 };
 
 
-
 const panoramica = {
   template: `
     <section>
@@ -301,7 +300,8 @@ const prenota = {
       <br>
       <center><div v-if="!isLoggedIn">
         Non hai un account?
-        <a @click.prevent="goToRegistration">Registrati qui</a>
+        <a href="javascript:void(0)" @click.prevent="goToRegistration" class="text-primary">Registrati qui</a>
+
       </div></center>
     </section>
   `,
@@ -326,16 +326,15 @@ const prenota = {
         const data = await response.json();
 
         if (response.ok) {
-          // Login riuscito
+          
           this.isLoggedIn = true;
 
-          // Salva i dati in sessionStorage
+          
           sessionStorage.setItem('user', JSON.stringify({
             email: this.email,
             id: data.user_id
           }));
 
-          // SweetAlert al posto dei div
           Swal.fire({
             icon: 'success',
             title: 'Accesso effettuato!',
@@ -344,13 +343,12 @@ const prenota = {
             showConfirmButton: false
           });
 
-          // Reindirizza dopo 1,5 secondi
           setTimeout(() => {
             this.$router.push({ name: 'prenota2' }); 
           }, 1500);
 
         } else {
-          // Errore login
+          
           Swal.fire({
             icon: 'error',
             title: 'Errore!',
@@ -372,10 +370,10 @@ const prenota = {
     },
   },
   mounted() {
-    // Verifica se l'utente è già loggato al caricamento della pagina
+    
     const user = sessionStorage.getItem('user');
     if (user) {
-      // Se i dati di login sono trovati in sessionStorage, reindirizza automaticamente
+      
       this.$router.push({ name: 'prenota2' });
     }
   },
@@ -453,7 +451,8 @@ const registrati = {
 
           <br>
           <center><div>
-              Hai già un account? <a @click.prevent="goToLogin">Accedi qui</a>
+              Hai già un account? 
+              <a href="javascript:void(0)" @click.prevent="goToLogin" class="text-primary">Accedi qui</a>
           </div></center>
       </section>
   `,
@@ -491,7 +490,7 @@ const registrati = {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          // Utente registrato con successo
+          
           Swal.fire({
             icon: 'success',
             title: 'Registrazione completata!',
@@ -500,13 +499,12 @@ const registrati = {
             showConfirmButton: false
           });
 
-          // Reindirizza dopo 1,5 secondi
           setTimeout(() => {
             this.$router.push({ name: 'prenota' });
           }, 1500);
 
         } else if (data.error) {
-          // Mostra errore con SweetAlert
+          
           Swal.fire({
             icon: 'error',
             title: 'Errore!',
@@ -598,7 +596,7 @@ const prenota2 = {
         </tr>
       </tbody>
     </table>
-
+    <br><br>
     <div id="calendar" style="margin-top:20px;"></div>
 
     <div v-if="isLoading">
@@ -609,7 +607,7 @@ const prenota2 = {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modifica prenotazione</h5>
+            <h4 class="modal-title">Modifica prenotazione</h4>
             <button type="button" class="btn-close" @click="chiudiModale"></button>
           </div>
           <div class="modal-body">
@@ -630,8 +628,7 @@ const prenota2 = {
             <input type="number" class="form-control mb-2" v-model.number="prenotazioneSelezionata.numero_persone" min="1" max="4" />
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" @click="salvaModifica">Salva</button>
-            <button type="button" class="btn btn-danger" @click="chiudiModale">Annulla</button>
+            <button type="button" class="btn btn-primary w-100" @click="salvaModifica">Salva</button>
           </div>
         </div>
       </div>
